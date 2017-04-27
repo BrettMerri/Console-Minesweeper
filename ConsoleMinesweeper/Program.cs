@@ -10,16 +10,18 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
-             
 
-            //EasyBoard board1 = new EasyBoard();
-            //board1.CreateBoard();
+            Console.WriteLine("Easy board:");
+            EasyBoard board1 = new EasyBoard();
+            board1.CreateBoard();
 
-            //MediumBoard board2 = new MediumBoard();
-            //board2.CreateBoard();
+            Console.WriteLine("Medium board:");
+            MediumBoard board2 = new MediumBoard();
+            board2.CreateBoard();
 
-            //HardBoard board3 = new HardBoard();
-            //board3.CreateBoard();
+            Console.WriteLine("Hard board:");
+            HardBoard board3 = new HardBoard();
+            board3.CreateBoard();
 
 
         }

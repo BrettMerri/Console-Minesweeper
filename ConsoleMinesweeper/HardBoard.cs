@@ -10,10 +10,21 @@ namespace ConsoleMinesweeper
     {
         public override void CreateBoard()
         {
+            int mines = 99;
             int[,] BoardArray = new int[16, 30];
+
+            Random r = new Random();
 
             int rowLength = BoardArray.GetLength(0);
             int colLength = BoardArray.GetLength(1);
+
+            for (int i = 0; i <= mines; i++)
+            {
+                if (BoardArray[r.Next(0, rowLength), r.Next(0, colLength)] == 1)
+                    i--;
+                else
+                    BoardArray[r.Next(0, rowLength), r.Next(0, colLength)] = 1;
+            }
 
             for (int i = 0; i < rowLength; i++)
             {
