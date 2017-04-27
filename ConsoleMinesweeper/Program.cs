@@ -42,11 +42,12 @@ namespace ConsoleMinesweeper
             int[,] emptyBoardArray = new int[newBoard.Horizontal, newBoard.Vertical]; //Create a 2d array with all values as 0's
             int[,] boardArray = newBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
 
-            newBoard.CreateBoard(boardArray, availableCells); //Prints the board
-
             bool run = true;
             while (run)
             {
+                Console.Clear();
+                Console.WriteLine($"\n=== {newBoard.Title} Mode - Mines: {newBoard.Mines} ===");
+                newBoard.CreateBoard(boardArray, availableCells); //Prints the board
 
                 Console.Write("Enter value for X coordinate: ");
                 xCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Horizontal) - 1;
@@ -55,8 +56,6 @@ namespace ConsoleMinesweeper
                 yCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Vertical) - 1;
 
                 availableCells[xCoord, yCoord] = true;
-
-                newBoard.CreateBoard(boardArray, availableCells);
             }
 
         }

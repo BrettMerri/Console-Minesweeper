@@ -10,6 +10,7 @@ namespace ConsoleMinesweeper
     {
         public EasyBoard()
         {
+            Title = "Easy";
             Horizontal = 9;
             Vertical = 9;
             Mines = 10;

@@ -8,6 +8,7 @@ namespace ConsoleMinesweeper
 {
     class Board
     {
+        private string title;
         private int horizontal;
         private int vertical;
         private int mines;
@@ -28,8 +29,6 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard(int[,] boardArray, bool[,] availableCells)
         {
-            Console.Clear();
-
             bool twoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
             bool twoDigitYAxis = false;
 
@@ -60,7 +59,7 @@ namespace ConsoleMinesweeper
                     if (twoDigitXAxis == true)
                         Console.Write("  "); //Print board with two spaces at after each element
                     else
-                    Console.Write(" "); //Print board with one space after each element
+                        Console.Write(" "); //Print board with one space after each element
 
                 }
                 Console.ForegroundColor = ConsoleColor.Gray;
@@ -76,7 +75,7 @@ namespace ConsoleMinesweeper
             for (int i = 0; i < horizontal; i++)
             {
                 //If there will be 2-digit X-axis, print all the single digit coordinants with an extra space at the end
-                if (twoDigitXAxis == true && i+1 < 10)
+                if (twoDigitXAxis == true && i + 1 < 10)
                     Console.Write($"{i + 1}  "); //Prints single-digit X-axis coordinants with two spaces at the end
                 else
                     Console.Write($"{i + 1} "); //Prints two-digit X-axis coordinants with one space at the end
@@ -134,6 +133,19 @@ namespace ConsoleMinesweeper
             set
             {
                 mines = value;
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+
+            set
+            {
+                title = value;
             }
         }
     }
