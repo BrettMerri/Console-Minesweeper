@@ -28,27 +28,56 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
-            int[,] EmptyBoardArray = new int[Horizontal, Vertical];
+            int[,] EmptyBoardArray = new int[Horizontal, Vertical]; //Create a 2d array with all values as 0's
 
-            int[,] BoardArray = GenerateMines(EmptyBoardArray);
+            int[,] BoardArray = GenerateMines(EmptyBoardArray); //Populates 1's to the array randomly (mines)
 
-            Console.WriteLine();
+            bool TwoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
+            bool TwoDigitYAxis = false;
+
+            if (Horizontal > 9) //Sets TwoDigitXAxis to true if Horizontal is greater than 9
+                TwoDigitXAxis = true;
+            if (Vertical > 9) //Sets TwoDigitYAxis to true if Vertical is greater than 9
+                TwoDigitYAxis = true;
+
+            Console.WriteLine(); //Print new line before printing the board
+
             for (int i = 0; i < Horizontal; i++)
             {
-                Console.Write($"{Horizontal - i} "); //Prints Y-axis coordinants
+                //If there will be 2-digit Y axis, print all the single digits in the Y axis with an extra space at the end so the board is aligned.
+                if (TwoDigitYAxis == true && Horizontal - i < 10)
+                    Console.Write($"{Horizontal - i}  "); //Prints Y-axis coordinants with two spaces at the end
+                else
+                    Console.Write($"{Horizontal - i} "); //Prints Y-axis coordinants with one space at the end
+
+
                 for (int j = 0; j < Vertical; j++)
                 {
-                    Console.Write("# ");
+                    //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
+                    if (TwoDigitXAxis == true)
+                        Console.Write("#  "); //Print board with two spaces at after each element
+                    else
+                    Console.Write("# "); //Print board with one space after each element
                     //Console.Write(string.Format("{0} ", BoardArray[i, j]));
                 }
                 Console.WriteLine();
             }
-            Console.Write("  "); //Left padding for the x-axis coordinants
-            for (int i = 0; i < Horizontal; i++)
+
+            //If there will be a 2-digit Y axis, print a two-space left-padding before printing the X-axis.
+            if (TwoDigitYAxis == true)
+                Console.Write("   "); //2 space left padding before the X-axis coodinants
+            else
+                Console.Write("  "); //1 space left padding before the x-axis coordinants
+
+            for (int i = 0; i < Vertical; i++)
             {
-                Console.Write($"{i + 1} "); //Prints x-axis coordinants
+                //If there will be 2-digit X-axis, print all the single digit coordinants with an extra space at the end
+                if (TwoDigitXAxis == true && i+1 < 10)
+                    Console.Write($"{i + 1}  "); //Prints single-digit X-axis coordinants with two spaces at the end
+                else
+                    Console.Write($"{i + 1} "); //Prints two-digit X-axis coordinants with one space at the end
             }
-            Console.WriteLine("\n");
+            Console.Write("\n\n"); //Print two new lines after the board.
 
         }
         public int[,] GenerateMines(int[,] EmptyBoardArray)
