@@ -8,9 +8,14 @@ namespace ConsoleMinesweeper
 {
     class MediumBoard : Board
     {
+        public MediumBoard()
+        {
+            Horizontal = 16;
+            Vertical = 16;
+            Mines = 40;
+        }
         public override void CreateBoard()
         {
-            int mines = 40;
             int[,] BoardArray = new int[16, 16];
 
             Random r = new Random();
@@ -18,7 +23,7 @@ namespace ConsoleMinesweeper
             int rowLength = BoardArray.GetLength(0);
             int colLength = BoardArray.GetLength(1);
 
-            for (int i = 0; i <= mines; i++)
+            for (int i = 0; i < Mines; i++)
             {
                 if (BoardArray[r.Next(0, rowLength), r.Next(0, colLength)] == 1)
                     i--;
@@ -34,7 +39,6 @@ namespace ConsoleMinesweeper
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
-            Console.ReadLine();
 
         }
     }

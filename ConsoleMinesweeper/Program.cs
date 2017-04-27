@@ -55,6 +55,7 @@ namespace ConsoleMinesweeper
         public static void StartGame(Board newBoard)
         {
             newBoard.CreateBoard();
+            Console.Write("Enter your co-ordinants: ");
         }
 
     }
