@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleMinesweeper
 {
-    class Board
+    abstract class Board
     {
         private int horizontal;
         private int vertical;
         private int mines;
+
+        public Board()
+        {
+            horizontal = 0;
+            vertical = 0;
+            mines = 0;
+        }
 
         public Board(int horizontal, int vertical, int mines)
         {
@@ -18,6 +25,8 @@ namespace ConsoleMinesweeper
             this.vertical = vertical;
             this.mines = mines;
         }
+
+        public abstract void CreateBoard();
 
         public int Horizontal
         {
