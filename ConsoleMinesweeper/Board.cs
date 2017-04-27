@@ -54,10 +54,10 @@ namespace ConsoleMinesweeper
                 Console.ForegroundColor = ConsoleColor.White;
                 for (int j = 0; j < Horizontal; j++)
                 {
-                    if (AvailableCells[j,i] == false)
+                    if (AvailableCells[j, Vertical - i - 1] == false)
                         Console.Write("#");
                     else
-                        Console.Write(string.Format("{0}", BoardArray[j, i]));
+                        Console.Write(string.Format("{0}", BoardArray[j, Vertical - i - 1]));
 
                     //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
                     if (TwoDigitXAxis == true)

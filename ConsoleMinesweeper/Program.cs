@@ -57,9 +57,21 @@ namespace ConsoleMinesweeper
 
         public static void StartGame(Board newBoard)
         {
+
+            int xCoord;
+            int yCoord;
+
+
             bool[,] AvailableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
             newBoard.CreateBoard(AvailableCells); //Prints the board with coordinants
-            Console.Write("Enter your co-ordinants: ");
+            Console.Write("Enter your coordinates: ");
+            Console.Write("Enter value for X coordinate: ");
+             xCoord = Convert.ToInt32(Console.ReadLine())-1;
+            Console.Write("Enter value for Y coordinate: ");
+            yCoord = Convert.ToInt32(Console.ReadLine())-1;
+
+            AvailableCells[xCoord, yCoord] = true;
+            newBoard.CreateBoard(AvailableCells);
         }
 
     }
