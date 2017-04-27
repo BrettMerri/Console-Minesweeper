@@ -42,16 +42,16 @@ namespace ConsoleMinesweeper
 
             Console.WriteLine(); //Print new line before printing the board
 
-            for (int i = 0; i < Horizontal; i++)
+            for (int i = 0; i < Vertical; i++)
             {
                 //If there will be 2-digit Y axis, print all the single digits in the Y axis with an extra space at the end so the board is aligned.
-                if (TwoDigitYAxis == true && Horizontal - i < 10)
-                    Console.Write($"{Horizontal - i}  "); //Prints Y-axis coordinants with two spaces at the end
+                if (TwoDigitYAxis == true && Vertical - i < 10)
+                    Console.Write($"{Vertical - i}  "); //Prints Y-axis coordinants with two spaces at the end
                 else
-                    Console.Write($"{Horizontal - i} "); //Prints Y-axis coordinants with one space at the end
+                    Console.Write($"{Vertical - i} "); //Prints Y-axis coordinants with one space at the end
 
 
-                for (int j = 0; j < Vertical; j++)
+                for (int j = 0; j < Horizontal; j++)
                 {
                     //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
                     if (TwoDigitXAxis == true)
@@ -63,13 +63,13 @@ namespace ConsoleMinesweeper
                 Console.WriteLine();
             }
 
-            //If there will be a 2-digit Y axis, print a two-space left-padding before printing the X-axis.
+            //If there will be a 2-digit Y axis, print a three-space left-padding before printing the X-axis.
             if (TwoDigitYAxis == true)
-                Console.Write("   "); //2 space left padding before the X-axis coodinants
+                Console.Write("   "); //3 space left padding before the X-axis coodinants
             else
-                Console.Write("  "); //1 space left padding before the x-axis coordinants
+                Console.Write("  "); //2 space left padding before the x-axis coordinants
 
-            for (int i = 0; i < Vertical; i++)
+            for (int i = 0; i < Horizontal; i++)
             {
                 //If there will be 2-digit X-axis, print all the single digit coordinants with an extra space at the end
                 if (TwoDigitXAxis == true && i+1 < 10)
