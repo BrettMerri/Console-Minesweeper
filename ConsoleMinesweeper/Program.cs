@@ -17,7 +17,7 @@ namespace ConsoleMinesweeper
 
             Console.WriteLine("Welcome to your Minesweeper game application: \n");
             Console.Write("Please select a board type: ");
-            string SelectedBoard = Console.ReadLine();
+            string SelectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard" });
 
             Console.WriteLine($"You selected the {SelectedBoard} board.");
 
