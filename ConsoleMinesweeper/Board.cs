@@ -26,12 +26,9 @@ namespace ConsoleMinesweeper
             this.mines = mines;
         }
 
-        public void CreateBoard(bool[,] AvailableCells)
+        public void CreateBoard(int[,] BoardArray, bool[,] AvailableCells)
         {
             Console.Clear();
-            int[,] EmptyBoardArray = new int[Horizontal, Vertical]; //Create a 2d array with all values as 0's
-
-            int[,] BoardArray = GenerateMines(EmptyBoardArray); //Populates 1's to the array randomly (mines)
 
             bool TwoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
             bool TwoDigitYAxis = false;

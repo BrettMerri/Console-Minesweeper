@@ -57,21 +57,31 @@ namespace ConsoleMinesweeper
 
         public static void StartGame(Board newBoard)
         {
-
             int xCoord;
             int yCoord;
 
-
             bool[,] AvailableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
-            newBoard.CreateBoard(AvailableCells); //Prints the board with coordinants
-            Console.Write("Enter your coordinates: ");
-            Console.Write("Enter value for X coordinate: ");
-             xCoord = Convert.ToInt32(Console.ReadLine())-1;
-            Console.Write("Enter value for Y coordinate: ");
-            yCoord = Convert.ToInt32(Console.ReadLine())-1;
 
-            AvailableCells[xCoord, yCoord] = true;
-            newBoard.CreateBoard(AvailableCells);
+            int[,] EmptyBoardArray = new int[newBoard.Horizontal, newBoard.Vertical]; //Create a 2d array with all values as 0's
+            int[,] BoardArray = newBoard.GenerateMines(EmptyBoardArray); //Populates 1's to the array randomly (mines)
+
+            newBoard.CreateBoard(BoardArray, AvailableCells); //Prints the board
+
+            bool run = true;
+            while (run)
+            {
+
+                Console.Write("Enter value for X coordinate: ");
+                xCoord = int.Parse(Console.ReadLine()) - 1;
+
+                Console.Write("Enter value for Y coordinate: ");
+                yCoord = int.Parse(Console.ReadLine()) - 1;
+
+                AvailableCells[xCoord, yCoord] = true;
+
+                newBoard.CreateBoard(BoardArray, AvailableCells);
+            }
+
         }
 
     }
