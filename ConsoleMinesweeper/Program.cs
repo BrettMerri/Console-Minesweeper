@@ -21,7 +21,7 @@ namespace ConsoleMinesweeper
 
             Console.WriteLine($"You selected the {SelectedBoard} board.");
 
-
+            
             if (SelectedBoard == "easy")
             {
                 StartGame(easyBoard);

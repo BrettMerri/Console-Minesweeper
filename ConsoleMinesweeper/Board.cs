@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleMinesweeper
 {
-    abstract class Board
+    class Board
     {
         private int horizontal;
         private int vertical;
@@ -26,7 +26,34 @@ namespace ConsoleMinesweeper
             this.mines = mines;
         }
 
-        public abstract void CreateBoard();
+        public void CreateBoard()
+        {
+            int[,] EmptyBoardArray = new int[Horizontal, Vertical];
+
+            int[,] BoardArray = GenerateMines(EmptyBoardArray);
+
+            for (int i = 0; i < Horizontal; i++)
+            {
+                for (int j = 0; j < Vertical; j++)
+                {
+                    Console.Write(string.Format("{0} ", BoardArray[i, j]));
+                }
+                Console.Write(Environment.NewLine + Environment.NewLine);
+            }
+        }
+        public int[,] GenerateMines(int[,] EmptyBoardArray)
+        {
+            Random r = new Random();
+
+            for (int i = 0; i < Mines; i++)
+            {
+                if (EmptyBoardArray[r.Next(0, Horizontal), r.Next(0, Vertical)] == 1)
+                    i--;
+                else
+                    EmptyBoardArray[r.Next(0, Horizontal), r.Next(0, Vertical)] = 1;
+            }
+            return EmptyBoardArray;
+        }
 
         public int Horizontal
         {

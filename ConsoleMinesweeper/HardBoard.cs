@@ -14,32 +14,5 @@ namespace ConsoleMinesweeper
             Vertical = 30;
             Mines = 99;
         }
-        public override void CreateBoard()
-        {
-            int[,] BoardArray = new int[16, 30];
-
-            Random r = new Random();
-
-            int rowLength = BoardArray.GetLength(0);
-            int colLength = BoardArray.GetLength(1);
-
-            for (int i = 0; i < Mines; i++)
-            {
-                if (BoardArray[r.Next(0, rowLength), r.Next(0, colLength)] == 1)
-                    i--;
-                else
-                    BoardArray[r.Next(0, rowLength), r.Next(0, colLength)] = 1;
-            }
-
-            for (int i = 0; i < rowLength; i++)
-            {
-                for (int j = 0; j < colLength; j++)
-                {
-                    Console.Write(string.Format("{0} ", BoardArray[i, j]));
-                }
-                Console.Write(Environment.NewLine + Environment.NewLine);
-            }
-
-        }
     }
 }
