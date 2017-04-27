@@ -13,45 +13,23 @@ namespace ConsoleMinesweeper
             Console.BackgroundColor = ConsoleColor.Black; //Added default console colors.
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            Board easyBoard = new EasyBoard(); //Create all three board objects
+            Board easyBoard = new EasyBoard(); //Create all three Board objects
             Board mediumBoard = new MediumBoard();
             Board hardBoard = new HardBoard();
 
             Console.WriteLine("Welcome to your Minesweeper game application: \n");
+
             Console.Write("Please select a board type: ");
 
-            //Gets a string input from the user that is validated to only be "easy", "medium", or "hard"
-            string SelectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard" });
-
-            Console.WriteLine($"You selected the {SelectedBoard} board.");
-
+            //Gets "easy", "medium", or "hard" input from the user
+            string selectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard" });
             
-            if (SelectedBoard == "easy")
-            {
+            if (selectedBoard == "easy")
                 StartGame(easyBoard); //Start game with the easy board
-            }
-            else if (SelectedBoard == "medium") 
-            {
+            else if (selectedBoard == "medium") 
                 StartGame(mediumBoard); //Start game with the medium board
-            }
             else
-            {
                 StartGame(hardBoard); //Start game with the hard board
-            }
-
-            
-            //Console.WriteLine("Easy board:");
-            //Board board1 = new EasyBoard();
-            //board1.CreateBoard();
-
-            //Console.WriteLine("Medium board:");
-            //Board board2 = new MediumBoard();
-            //board2.CreateBoard();
-
-            //Console.WriteLine("Hard board:");
-            //Board board3 = new HardBoard();
-            //board3.CreateBoard();
-
 
         }
 
@@ -60,12 +38,11 @@ namespace ConsoleMinesweeper
             int xCoord;
             int yCoord;
 
-            bool[,] AvailableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
+            bool[,] availableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
+            int[,] emptyBoardArray = new int[newBoard.Horizontal, newBoard.Vertical]; //Create a 2d array with all values as 0's
+            int[,] boardArray = newBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
 
-            int[,] EmptyBoardArray = new int[newBoard.Horizontal, newBoard.Vertical]; //Create a 2d array with all values as 0's
-            int[,] BoardArray = newBoard.GenerateMines(EmptyBoardArray); //Populates 1's to the array randomly (mines)
-
-            newBoard.CreateBoard(BoardArray, AvailableCells); //Prints the board
+            newBoard.CreateBoard(boardArray, availableCells); //Prints the board
 
             bool run = true;
             while (run)
@@ -77,10 +54,9 @@ namespace ConsoleMinesweeper
                 Console.Write("Enter value for Y coordinate: ");
                 yCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Vertical) - 1;
 
-                
-                AvailableCells[xCoord, yCoord] = true;
+                availableCells[xCoord, yCoord] = true;
 
-                newBoard.CreateBoard(BoardArray, AvailableCells);
+                newBoard.CreateBoard(boardArray, availableCells);
             }
 
         }

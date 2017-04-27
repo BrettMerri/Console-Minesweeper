@@ -26,38 +26,38 @@ namespace ConsoleMinesweeper
             this.mines = mines;
         }
 
-        public void CreateBoard(int[,] BoardArray, bool[,] AvailableCells)
+        public void CreateBoard(int[,] boardArray, bool[,] availableCells)
         {
             Console.Clear();
 
-            bool TwoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
-            bool TwoDigitYAxis = false;
+            bool twoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
+            bool twoDigitYAxis = false;
 
-            if (Horizontal > 9) //Sets TwoDigitXAxis to true if Horizontal is greater than 9
-                TwoDigitXAxis = true;
-            if (Vertical > 9) //Sets TwoDigitYAxis to true if Vertical is greater than 9
-                TwoDigitYAxis = true;
+            if (horizontal > 9) //Sets TwoDigitXAxis to true if Horizontal is greater than 9
+                twoDigitXAxis = true;
+            if (vertical > 9) //Sets TwoDigitYAxis to true if Vertical is greater than 9
+                twoDigitYAxis = true;
 
             Console.WriteLine(); //Print new line before printing the board
 
-            for (int i = 0; i < Vertical; i++)
+            for (int i = 0; i < vertical; i++)
             {
                 //If there will be 2-digit Y axis, print all the single digits in the Y axis with an extra space at the end so the board is aligned.
-                if (TwoDigitYAxis == true && Vertical - i < 10)
-                    Console.Write($"{Vertical - i}  "); //Prints Y-axis coordinants with two spaces at the end
+                if (twoDigitYAxis == true && vertical - i < 10)
+                    Console.Write($"{vertical - i}  "); //Prints Y-axis coordinants with two spaces at the end
                 else
-                    Console.Write($"{Vertical - i} "); //Prints Y-axis coordinants with one space at the end
+                    Console.Write($"{vertical - i} "); //Prints Y-axis coordinants with one space at the end
 
                 Console.ForegroundColor = ConsoleColor.White;
-                for (int j = 0; j < Horizontal; j++)
+                for (int j = 0; j < horizontal; j++)
                 {
-                    if (AvailableCells[j, Vertical - i - 1] == false)
+                    if (availableCells[j, Vertical - i - 1] == false)
                         Console.Write("#");
                     else
-                        Console.Write(string.Format("{0}", BoardArray[j, Vertical - i - 1]));
+                        Console.Write(string.Format("{0}", boardArray[j, Vertical - i - 1]));
 
                     //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
-                    if (TwoDigitXAxis == true)
+                    if (twoDigitXAxis == true)
                         Console.Write("  "); //Print board with two spaces at after each element
                     else
                     Console.Write(" "); //Print board with one space after each element
@@ -68,15 +68,15 @@ namespace ConsoleMinesweeper
             }
 
             //If there will be a 2-digit Y axis, print a three-space left-padding before printing the X-axis.
-            if (TwoDigitYAxis == true)
+            if (twoDigitYAxis == true)
                 Console.Write("   "); //3 space left padding before the X-axis coodinants
             else
                 Console.Write("  "); //2 space left padding before the x-axis coordinants
 
-            for (int i = 0; i < Horizontal; i++)
+            for (int i = 0; i < horizontal; i++)
             {
                 //If there will be 2-digit X-axis, print all the single digit coordinants with an extra space at the end
-                if (TwoDigitXAxis == true && i+1 < 10)
+                if (twoDigitXAxis == true && i+1 < 10)
                     Console.Write($"{i + 1}  "); //Prints single-digit X-axis coordinants with two spaces at the end
                 else
                     Console.Write($"{i + 1} "); //Prints two-digit X-axis coordinants with one space at the end
@@ -84,18 +84,18 @@ namespace ConsoleMinesweeper
             Console.Write("\n\n"); //Print two new lines after the board.
 
         }
-        public int[,] GenerateMines(int[,] EmptyBoardArray)
+        public int[,] GenerateMines(int[,] emptyBoardArray)
         {
             Random r = new Random();
 
-            for (int i = 0; i < Mines; i++)
+            for (int i = 0; i < mines; i++)
             {
-                if (EmptyBoardArray[r.Next(0, Horizontal), r.Next(0, Vertical)] == 1)
+                if (emptyBoardArray[r.Next(0, horizontal), r.Next(0, vertical)] == 1)
                     i--;
                 else
-                    EmptyBoardArray[r.Next(0, Horizontal), r.Next(0, Vertical)] = 1;
+                    emptyBoardArray[r.Next(0, horizontal), r.Next(0, vertical)] = 1;
             }
-            return EmptyBoardArray;
+            return emptyBoardArray;
         }
 
         public int Horizontal
