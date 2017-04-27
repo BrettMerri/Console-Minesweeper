@@ -72,11 +72,12 @@ namespace ConsoleMinesweeper
             {
 
                 Console.Write("Enter value for X coordinate: ");
-                xCoord = int.Parse(Console.ReadLine()) - 1;
+                xCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Horizontal) - 1;
 
                 Console.Write("Enter value for Y coordinate: ");
-                yCoord = int.Parse(Console.ReadLine()) - 1;
+                yCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Vertical) - 1;
 
+                
                 AvailableCells[xCoord, yCoord] = true;
 
                 newBoard.CreateBoard(BoardArray, AvailableCells);
