@@ -32,14 +32,24 @@ namespace ConsoleMinesweeper
 
             int[,] BoardArray = GenerateMines(EmptyBoardArray);
 
+            Console.WriteLine();
             for (int i = 0; i < Horizontal; i++)
             {
+                Console.Write($"{Horizontal - i} "); //Prints Y-axis coordinants
                 for (int j = 0; j < Vertical; j++)
                 {
-                    Console.Write(string.Format("{0} ", BoardArray[i, j]));
+                    Console.Write("# ");
+                    //Console.Write(string.Format("{0} ", BoardArray[i, j]));
                 }
-                Console.Write("\n");
+                Console.WriteLine();
             }
+            Console.Write("  "); //Left padding for the x-axis coordinants
+            for (int i = 0; i < Horizontal; i++)
+            {
+                Console.Write($"{i + 1} "); //Prints x-axis coordinants
+            }
+            Console.WriteLine("\n");
+
         }
         public int[,] GenerateMines(int[,] EmptyBoardArray)
         {
