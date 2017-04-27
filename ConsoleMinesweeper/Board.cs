@@ -38,7 +38,7 @@ namespace ConsoleMinesweeper
                 {
                     Console.Write(string.Format("{0} ", BoardArray[i, j]));
                 }
-                Console.Write(Environment.NewLine + Environment.NewLine);
+                Console.Write("\n");
             }
         }
         public int[,] GenerateMines(int[,] EmptyBoardArray)
