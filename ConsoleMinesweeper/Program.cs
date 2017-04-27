@@ -11,19 +11,50 @@ namespace ConsoleMinesweeper
         static void Main(string[] args)
         {
 
-            Console.WriteLine("Easy board:");
-            EasyBoard board1 = new EasyBoard();
-            board1.CreateBoard();
+            Board easyBoard = new EasyBoard();
+            Board mediumBoard = new MediumBoard();
+            Board hardBoard = new HardBoard();
 
-            Console.WriteLine("Medium board:");
-            MediumBoard board2 = new MediumBoard();
-            board2.CreateBoard();
+            Console.WriteLine("Welcome to your Minesweeper game application: \n");
+            Console.Write("Please select a board type: ");
+            string SelectedBoard = Console.ReadLine();
 
-            Console.WriteLine("Hard board:");
-            HardBoard board3 = new HardBoard();
-            board3.CreateBoard();
+            Console.WriteLine($"You selected the {SelectedBoard} board.");
 
 
+            if (SelectedBoard == "easy")
+            {
+                StartGame(easyBoard);
+
+            }
+            else if (SelectedBoard == "medium") 
+            {
+                StartGame(mediumBoard);
+            }
+            else
+            {
+                StartGame(hardBoard);
+            }
+
+            
+            //Console.WriteLine("Easy board:");
+            //Board board1 = new EasyBoard();
+            //board1.CreateBoard();
+
+            //Console.WriteLine("Medium board:");
+            //Board board2 = new MediumBoard();
+            //board2.CreateBoard();
+
+            //Console.WriteLine("Hard board:");
+            //Board board3 = new HardBoard();
+            //board3.CreateBoard();
+
+
+        }
+
+        public static void StartGame(Board newBoard)
+        {
+            newBoard.CreateBoard();
         }
 
     }
