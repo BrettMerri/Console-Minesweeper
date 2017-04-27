@@ -29,7 +29,6 @@ namespace ConsoleMinesweeper
             if (SelectedBoard == "easy")
             {
                 StartGame(easyBoard); //Start game with the easy board
-
             }
             else if (SelectedBoard == "medium") 
             {
@@ -58,7 +57,8 @@ namespace ConsoleMinesweeper
 
         public static void StartGame(Board newBoard)
         {
-            newBoard.CreateBoard(); //Prints the board with coordinants
+            bool[,] AvailableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
+            newBoard.CreateBoard(AvailableCells); //Prints the board with coordinants
             Console.Write("Enter your co-ordinants: ");
         }
 

@@ -26,8 +26,9 @@ namespace ConsoleMinesweeper
             this.mines = mines;
         }
 
-        public void CreateBoard()
+        public void CreateBoard(bool[,] AvailableCells)
         {
+            Console.Clear();
             int[,] EmptyBoardArray = new int[Horizontal, Vertical]; //Create a 2d array with all values as 0's
 
             int[,] BoardArray = GenerateMines(EmptyBoardArray); //Populates 1's to the array randomly (mines)
@@ -53,12 +54,17 @@ namespace ConsoleMinesweeper
                 Console.ForegroundColor = ConsoleColor.White;
                 for (int j = 0; j < Horizontal; j++)
                 {
+                    if (AvailableCells[j,i] == false)
+                        Console.Write("#");
+                    else
+                        Console.Write(string.Format("{0}", BoardArray[j, i]));
+
                     //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
                     if (TwoDigitXAxis == true)
-                        Console.Write("#  "); //Print board with two spaces at after each element
+                        Console.Write("  "); //Print board with two spaces at after each element
                     else
-                    Console.Write("# "); //Print board with one space after each element
-                    //Console.Write(string.Format("{0} ", BoardArray[i, j]));
+                    Console.Write(" "); //Print board with one space after each element
+
                 }
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine();
