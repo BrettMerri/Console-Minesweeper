@@ -10,13 +10,17 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
+            Console.BackgroundColor = ConsoleColor.Black; //Added default console colors.
+            Console.ForegroundColor = ConsoleColor.Gray;
 
-            Board easyBoard = new EasyBoard();
+            Board easyBoard = new EasyBoard(); //Create all three board objects
             Board mediumBoard = new MediumBoard();
             Board hardBoard = new HardBoard();
 
             Console.WriteLine("Welcome to your Minesweeper game application: \n");
             Console.Write("Please select a board type: ");
+
+            //Gets a string input from the user that is validated to only be "easy", "medium", or "hard"
             string SelectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard" });
 
             Console.WriteLine($"You selected the {SelectedBoard} board.");
@@ -24,16 +28,16 @@ namespace ConsoleMinesweeper
             
             if (SelectedBoard == "easy")
             {
-                StartGame(easyBoard);
+                StartGame(easyBoard); //Start game with the easy board
 
             }
             else if (SelectedBoard == "medium") 
             {
-                StartGame(mediumBoard);
+                StartGame(mediumBoard); //Start game with the medium board
             }
             else
             {
-                StartGame(hardBoard);
+                StartGame(hardBoard); //Start game with the hard board
             }
 
             
@@ -54,7 +58,7 @@ namespace ConsoleMinesweeper
 
         public static void StartGame(Board newBoard)
         {
-            newBoard.CreateBoard();
+            newBoard.CreateBoard(); //Prints the board with coordinants
             Console.Write("Enter your co-ordinants: ");
         }
 

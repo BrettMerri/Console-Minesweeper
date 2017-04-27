@@ -50,7 +50,7 @@ namespace ConsoleMinesweeper
                 else
                     Console.Write($"{Vertical - i} "); //Prints Y-axis coordinants with one space at the end
 
-
+                Console.ForegroundColor = ConsoleColor.White;
                 for (int j = 0; j < Horizontal; j++)
                 {
                     //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
@@ -60,6 +60,7 @@ namespace ConsoleMinesweeper
                     Console.Write("# "); //Print board with one space after each element
                     //Console.Write(string.Format("{0} ", BoardArray[i, j]));
                 }
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine();
             }
 
