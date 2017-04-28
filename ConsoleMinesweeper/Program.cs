@@ -10,26 +10,57 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
-            Console.BackgroundColor = ConsoleColor.Black; //Added default console colors.
+            //Add default console colors.
+            Console.BackgroundColor = ConsoleColor.Black; 
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            Board easyBoard = new EasyBoard(); //Create all three Board objects
-            Board mediumBoard = new MediumBoard();
-            Board hardBoard = new HardBoard();
+            Console.WriteLine("Welcome to the Console Minesweeper!\n");
 
-            Console.WriteLine("Welcome to your Minesweeper game application: \n");
+            Board currentBoard = GetGameMode();
+            StartGame(currentBoard);
+        }
 
-            Console.Write("Please select a board type: ");
+        public static Board GetGameMode()
+        {
+            //Print Game Mode Menu
+            Console.WriteLine("Please select a game mode: ");
+            Console.WriteLine("1.) Easy mode");
+            Console.WriteLine("2.) Medium mode");
+            Console.WriteLine("3.) Hard mode");
+            Console.WriteLine("4.) Custom mode");
 
             //Gets "easy", "medium", or "hard" input from the user
-            string selectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard", "custom" });
+            Console.Write("\nPlease enter a number (1-4): ");
+            int menuOptionInput = ConsoleValidation.GetIntegerInRange(1, 4);
 
-            if (selectedBoard == "easy")
-                StartGame(easyBoard); //Start game with the easy board
-            else if (selectedBoard == "medium")
-                StartGame(mediumBoard); //Start game with the medium board
-            else if (selectedBoard == "custom")
+            //Easy mode
+            if (menuOptionInput == 1)
             {
+                //Start game with the easy board
+                Board easyBoard = new EasyBoard();
+                return easyBoard;
+            }
+
+            //Medium mode
+            else if (menuOptionInput == 2)
+            {
+                //Start game with the medium board
+                Board mediumBoard = new MediumBoard();
+                return mediumBoard;
+            }
+
+            //Hard mode
+            else if (menuOptionInput == 3)
+            {
+                //Start game with the hard board
+                Board hardBoard = new HardBoard();
+                return hardBoard;
+            }
+
+            //Custom mode
+            else
+            {
+                //Prompts user for the horizontal size, vertical size, and amount of mines
                 Console.Write("Horizontal size: ");
                 int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
@@ -41,12 +72,10 @@ namespace ConsoleMinesweeper
                 Console.Write("Amount of mines: ");
                 int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customArea);
 
+                //Start game with the custom board
                 Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
-                StartGame(customBoard);
+                return customBoard;
             }
-            else
-                StartGame(hardBoard); //Start game with the hard board
-
         }
 
         public static void StartGame(Board newBoard)
