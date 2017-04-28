@@ -10,7 +10,7 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
-            //Add title and default console colors
+            //Add console title, console colors, console window size, and console window position
             Console.Title = "Console Minesweeper";
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -67,18 +67,18 @@ namespace ConsoleMinesweeper
             else
             {
                 //Prompts user for the horizontal size
-                Console.Write("Horizontal size: ");
+                Console.Write("Horizontal size (3-30): ");
                 int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
                 //Prompts user for the vertical size
-                Console.Write("Vertical size: ");
+                Console.Write("Vertical size (3-30): ");
                 int customVerticalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
-                int customArea = customHorizontalInput * customVerticalInput;
+                int customBoardArea = customHorizontalInput * customVerticalInput;
 
-                //Prompts user for the amount of mines (max mines = board area)
-                Console.Write("Amount of mines: ");
-                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customArea);
+                //Prompts user for the amount of mines (max mines = custom board area)
+                Console.Write($"Amount of mines (1-{customBoardArea}): ");
+                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea);
 
                 //Start game with the custom board
                 Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
@@ -127,7 +127,7 @@ namespace ConsoleMinesweeper
                 yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
 
                 //Prompt user if he wants to select the flag the coordinate
-                Console.WriteLine($"Would you like to select or flag coordinate {xCoord},{yCoord}? (s/f): ");
+                Console.WriteLine($"Would you like to Select or Flag coordinate {xCoord},{yCoord}? (s/f): ");
                 string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
 
                 if (selection == "f")
@@ -140,7 +140,7 @@ namespace ConsoleMinesweeper
                 else
                 {
                     //Set the selected coordinant to true
-                    //A true unavailableCells value makes the cell unavailable
+                    //A true IsSelectedBoardArray value makes the cell unavailable
                     currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
                 }
 
