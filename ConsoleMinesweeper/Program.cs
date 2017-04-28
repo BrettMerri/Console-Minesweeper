@@ -95,14 +95,11 @@ namespace ConsoleMinesweeper
             int horizontalBoardSize = currentBoard.Horizontal;
             int verticalBoardSize = currentBoard.Vertical;
 
-            //2-D bool Array of unavailable cells. All values in array are initialized as "false"
-            bool[,] unavailableCells = new bool[horizontalBoardSize, verticalBoardSize]; 
+            //Sets the board's 2-D array, isSelectedBoardArray, to the size of the board. All values start as false.
+            currentBoard.IsSelectedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
-            //2-D int Array where all values are 0
-            int[,] emptyBoardArray = new int[horizontalBoardSize, verticalBoardSize];
-
-            //2-D int array with an mines added randomly throughout.
-            int[,] boardArray = currentBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
+            //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
+            currentBoard.GenerateMinesBoardArray();
 
             bool run = true;
             while (run)
@@ -115,7 +112,7 @@ namespace ConsoleMinesweeper
                 Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
 
                 //Prints the board
-                currentBoard.CreateBoard(boardArray, unavailableCells); 
+                currentBoard.CreateBoard(); 
 
                 //Prompt user for X coordinant
                 Console.Write("Enter value for X coordinate: "); 
@@ -126,8 +123,8 @@ namespace ConsoleMinesweeper
                 yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
 
                 //Set the selected coordinant to true
-                //A true unavailableCells value makes the cell unavailable
-                unavailableCells[xCoord, yCoord] = true;
+                //A true isSelectedBoardArray value makes the cell unavailable
+                currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
             }
 
         }

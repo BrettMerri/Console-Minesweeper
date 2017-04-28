@@ -13,12 +13,15 @@ namespace ConsoleMinesweeper
         private int vertical;
         private int mines;
 
+        private bool[,] minesBoardArray;
+        private bool[,] isSelectedBoardArray;
+
         public Board()
         {
             //All board variables will come from EasyBoard.cs, MediumBoard.cs, HardBoard.cs, or CustomerBoard.cs
         }
 
-        public void CreateBoard(int[,] boardArray, bool[,] unavailableCells)
+        public void CreateBoard()
         {
             //Initially set TwoDigitXAxis and TwoDigitYAxis to false.
             bool twoDigitXAxis = false; 
@@ -42,7 +45,7 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row, twoDigitYAxis);
 
                 //Writes the board values for this row
-                WriteBoardValues(unavailableCells, boardArray, row, twoDigitXAxis);
+                WriteBoardValues(row, twoDigitXAxis);
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
@@ -100,7 +103,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteBoardValues(bool[,] unavailableCells, int[,] boardArray, int row,  bool twoDigitXAxis)
+        public void WriteBoardValues(int row,  bool twoDigitXAxis)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
@@ -108,10 +111,10 @@ namespace ConsoleMinesweeper
             //Inner for loop: columns
             for (int column = 0; column < horizontal; column++)
             {
-                //j = the column index value
+                //column  = column index value
                 //Vertical - i - 1 = the row index value
                 //Checks if the value of the array is "not unavailable" (or available to be selected)
-                if (unavailableCells[column, vertical - row - 1] == false)
+                if (isSelectedBoardArray[column, vertical - row - 1] == false)
                 {
                     //Write "#" if the cell is availble to be selected
                     Console.Write("#");
@@ -119,7 +122,7 @@ namespace ConsoleMinesweeper
                 else
                 {
                     //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
-                    Console.Write(boardArray[column, vertical - row - 1].ToString());
+                    Console.Write(minesBoardArray[column, vertical - row - 1].ToString());
                 }
 
                 //If there a 2-digit X axis exists, write the board with an extra space after each element to algin the board with the axis.
@@ -139,14 +142,16 @@ namespace ConsoleMinesweeper
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public int[,] GenerateMines(int[,] emptyBoardArray)
+        public void GenerateMinesBoardArray()
         {
             //Creates new random object
             Random r = new Random();
 
             int randomHorizontalIndex;
             int randomVerticalIndex;
-            int randomIndexValue;
+            bool randomIndexValue;
+
+            bool[,] minesBoardArray = new bool[horizontal, vertical];
 
             //For each mine in the board
             for (int i = 0; i < mines; i++)
@@ -158,21 +163,20 @@ namespace ConsoleMinesweeper
                 randomVerticalIndex = r.Next(0, vertical);
 
                 //Finds the value of the a random cell selected by the randomHorizontalIndex and the randomVerticalIndex
-                randomIndexValue = emptyBoardArray[randomHorizontalIndex, randomVerticalIndex];
+                randomIndexValue = minesBoardArray[randomHorizontalIndex, randomVerticalIndex];
 
                 //Selects a random index horizontally and vertically.
                 //If the selected value is already 1 (mine), decrement i so that the for loop loops an extra time.
-                if (randomIndexValue == 1)
-                {
+                if (randomIndexValue == true)
                     i--;
-                }
                 else
                 {
                     //If the selected value is not 1 (mine), set that value to 1.
-                    emptyBoardArray[randomHorizontalIndex, randomVerticalIndex] = 1;
+                    minesBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
                 }
             }
-            return emptyBoardArray;
+            //set the minesBoardArray for this object to the minesBoardArray created in this method
+            this.minesBoardArray = minesBoardArray;
         }
 
         public int Horizontal
@@ -224,6 +228,32 @@ namespace ConsoleMinesweeper
             set
             {
                 title = value;
+            }
+        }
+
+        public bool[,] MinesBoardArray
+        {
+            get
+            {
+                return minesBoardArray;
+            }
+
+            set
+            {
+                minesBoardArray = value;
+            }
+        }
+
+        public bool[,] IsSelectedBoardArray
+        {
+            get
+            {
+                return isSelectedBoardArray;
+            }
+
+            set
+            {
+                isSelectedBoardArray = value;
             }
         }
     }
