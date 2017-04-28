@@ -145,7 +145,7 @@ namespace ConsoleMinesweeper
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public void GenerateMinesBoardArray()
+        public void GenerateMinesBoardArray(int xCoordIndex, int yCoordIndex)
         {
             //Creates new random object
             Random r = new Random();
@@ -153,8 +153,6 @@ namespace ConsoleMinesweeper
             int randomHorizontalIndex;
             int randomVerticalIndex;
             bool randomIndexValue;
-
-            bool[,] hasMineBoardArray = new bool[horizontal, vertical];
 
             //For each mine in the board
             for (int i = 0; i < mines; i++)
@@ -169,8 +167,10 @@ namespace ConsoleMinesweeper
                 randomIndexValue = hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex];
 
                 //Selects a random index horizontally and vertically.
-                //If the selected value is already 1 (mine), decrement i so that the for loop loops an extra time.
-                if (randomIndexValue == true)
+                //If the selected value is true (mine), decrement i so that the for loop loops an extra time.
+                //If the random coordinants = the first selected coordinants, decrement i so that the for loops loops an extra time.
+                if (randomIndexValue == true ||
+                   (randomHorizontalIndex == xCoordIndex && randomVerticalIndex == yCoordIndex))
                     i--;
                 else
                 {
@@ -178,8 +178,6 @@ namespace ConsoleMinesweeper
                     hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
                 }
             }
-            //set the minesBoardArray for this object to the minesBoardArray created in this method
-            this.hasMineBoardArray = hasMineBoardArray;
         }
 
         public int Horizontal
@@ -234,7 +232,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public bool[,] MinesBoardArray
+        public bool[,] HasMineBoardArray
         {
             get
             {
