@@ -22,28 +22,12 @@ namespace ConsoleMinesweeper
             Console.Write("Please select a board type: ");
 
             //Gets "easy", "medium", or "hard" input from the user
-            string selectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard", "custom" });
-
+            string selectedBoard = ConsoleValidation.GetValidString(new string[] { "easy", "medium", "hard" });
+            
             if (selectedBoard == "easy")
                 StartGame(easyBoard); //Start game with the easy board
-            else if (selectedBoard == "medium")
+            else if (selectedBoard == "medium") 
                 StartGame(mediumBoard); //Start game with the medium board
-            else if (selectedBoard == "custom")
-            {
-                Console.Write("Horizontal size: ");
-                int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
-
-                Console.Write("Vertical size: ");
-                int customVerticalInput = ConsoleValidation.GetIntegerInRange(3, 30);
-
-                int customArea = customHorizontalInput * customVerticalInput;
-
-                Console.Write("Amount of mines: ");
-                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customArea);
-
-                Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
-                StartGame(customBoard);
-            }
             else
                 StartGame(hardBoard); //Start game with the hard board
 
