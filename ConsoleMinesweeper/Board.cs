@@ -18,7 +18,7 @@ namespace ConsoleMinesweeper
             //All board variables will come from EasyBoard.cs, MediumBoard.cs, HardBoard.cs, or CustomerBoard.cs
         }
 
-        public void CreateBoard(int[,] boardArray, bool[,] unavailableCells)
+        public void CreateBoard(int[,] boardArray, bool[,]flaggedBoardArray, bool[,] unavailableCells)
         {
             //Initially set TwoDigitXAxis and TwoDigitYAxis to false.
             bool twoDigitXAxis = false; 
@@ -27,6 +27,7 @@ namespace ConsoleMinesweeper
             //Sets TwoDigitXAxis to true if Horizontal is greater than 9
             if (horizontal > 9) 
                 twoDigitXAxis = true;
+
 
             //Sets TwoDigitYAxis to true if Vertical is greater than 9
             if (vertical > 9) 
@@ -42,7 +43,7 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row, twoDigitYAxis);
 
                 //Writes the board values for this row
-                WriteBoardValues(unavailableCells, boardArray, row, twoDigitXAxis);
+                WriteBoardValues(unavailableCells,flaggedBoardArray, boardArray, row, twoDigitXAxis);
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
@@ -100,7 +101,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteBoardValues(bool[,] unavailableCells, int[,] boardArray, int row,  bool twoDigitXAxis)
+        public void WriteBoardValues(bool[,] unavailableCells, bool[,] flaggedBoardArray, int[,] boardArray, int row,  bool twoDigitXAxis)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
@@ -112,12 +113,15 @@ namespace ConsoleMinesweeper
                 //Vertical - i - 1 = the row index value
                 //Checks if the value of the array is "not unavailable" (or available to be selected)
                 if (unavailableCells[column, vertical - row - 1] == false)
-                {
+                { 
                     //Write "#" if the cell is availble to be selected
                     Console.Write("#");
                 }
                 else
                 {
+                    if (flaggedBoardArray[column, vertical - row - 1] == true)
+                        Console.Write("F");
+                    else
                     //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
                     Console.Write(boardArray[column, vertical - row - 1].ToString());
                 }

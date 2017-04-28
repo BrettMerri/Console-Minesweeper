@@ -12,7 +12,7 @@ namespace ConsoleMinesweeper
         {
             //Add title and default console colors
             Console.Title = "Console Minesweeper";
-            Console.BackgroundColor = ConsoleColor.Black; 
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
 
 
@@ -96,13 +96,17 @@ namespace ConsoleMinesweeper
             int verticalBoardSize = currentBoard.Vertical;
 
             //2-D bool Array of unavailable cells. All values in array are initialized as "false"
-            bool[,] unavailableCells = new bool[horizontalBoardSize, verticalBoardSize]; 
+            bool[,] unavailableCells = new bool[horizontalBoardSize, verticalBoardSize];
 
             //2-D int Array where all values are 0
             int[,] emptyBoardArray = new int[horizontalBoardSize, verticalBoardSize];
 
             //2-D int array with an mines added randomly throughout.
             int[,] boardArray = currentBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
+
+
+            //2D bool Array of flagged cells.  All values in array are initialized to "false"
+            bool[,] flaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
             bool run = true;
             while (run)
@@ -115,22 +119,36 @@ namespace ConsoleMinesweeper
                 Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
 
                 //Prints the board
-                currentBoard.CreateBoard(boardArray, unavailableCells); 
+                currentBoard.CreateBoard(boardArray, flaggedBoardArray, unavailableCells);
 
                 //Prompt user for X coordinant
-                Console.Write("Enter value for X coordinate: "); 
+                Console.Write("Enter value for X coordinate: ");
                 xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
 
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
                 yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
 
-                //Set the selected coordinant to true
-                //A true unavailableCells value makes the cell unavailable
-                unavailableCells[xCoord, yCoord] = true;
+                //Prompt user if he wants to select the flag the coordinate
+                Console.WriteLine($"Would you like to select or flag coordinate {xCoord},{yCoord}? (s/f): ");
+                string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
+
+                if (selection == "f")
+                {
+                    //Set the selected coordinant to true
+                    //A true flaggedBoardArray value makes the cell into a flag
+                    flaggedBoardArray[xCoord, yCoord] = true;
+                    unavailableCells[xCoord, yCoord] = true;
+                }
+                else
+                {
+                    //Set the selected coordinant to true
+                    //A true unavailableCells value makes the cell unavailable
+                    unavailableCells[xCoord, yCoord] = true;
+
+                }
             }
-
         }
-
     }
 }
+
