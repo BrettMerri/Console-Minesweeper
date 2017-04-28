@@ -15,6 +15,7 @@ namespace ConsoleMinesweeper
             Vertical = verical;
             Mines = mines;
             HasMineBoardArray = new bool[Horizontal, Vertical];
+            SurroundingMinesArray = new int[Horizontal, Vertical];
         }
     }
 }

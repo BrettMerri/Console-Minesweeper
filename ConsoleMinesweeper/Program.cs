@@ -169,6 +169,7 @@ namespace ConsoleMinesweeper
                 {
                     //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
                     currentBoard.GenerateMinesBoardArray(xCoordIndex, yCoordIndex);
+                    currentBoard.CheckForSurroundingMines();
 
                     //Set firstRun to false afterwards so we only generate the mine locations once.
                     firstRun = false;

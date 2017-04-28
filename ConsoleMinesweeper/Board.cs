@@ -20,7 +20,7 @@ namespace ConsoleMinesweeper
         private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
         private bool[,] isFlaggedBoardArray;
-        private int[,] surroundingFlagsArray;
+        private int[,] surroundingMinesArray;
 
         public Board()
         {
@@ -50,7 +50,7 @@ namespace ConsoleMinesweeper
                 //If WriteBoardValues returns false (mine was selected) end the game
                 if (!WriteBoardValues(row))
                 {
-                    RunGame = false;
+                    //RunGame = false;
                 }
 
                 //Creates a new line before going on to the next row
@@ -145,7 +145,7 @@ namespace ConsoleMinesweeper
                         //If there is no mine, write "_"
                         if (hasMineBoardArray[columnIndex, rowIndex] == false)
                         {
-                            Console.Write("_");
+                            Console.Write(surroundingMinesArray[columnIndex, rowIndex].ToString());
                         }
                         //If there is a mine, write a red "X" and set mineSelected to true
                         else
@@ -224,39 +224,105 @@ namespace ConsoleMinesweeper
 
 
         //Method to check for surrounding mines and input numbers corresponding to number of surrounding mines for each cell.
-        public int CheckForSurroundingMines(int xCoord, int yCoord)
-
+        public void CheckForSurroundingMines()
         {
-            int nearby_mine_count = 0;
+            int nearbyMineCount = 0;
+
+            bool checkAbove = true;
+            bool checkBelow = true;
+            bool checkLeft = true;
+            bool checkRight = true;
 
 
-            // Check for mine to the left
-            if (hasMineBoardArray[xCoord + 1, yCoord] == true)
-                nearby_mine_count++;
-            // Check for mine to the right.
-            if (hasMineBoardArray[xCoord - 1, yCoord] == true)
-                nearby_mine_count++;
-            // Check for mine diagonal-dright.
-            if (hasMineBoardArray[xCoord + 1, yCoord + 1] == true)
-                nearby_mine_count++;
-            //Check for mine diagonal-uright.
-            if (hasMineBoardArray[xCoord + 1, yCoord - 1] == true)
-                nearby_mine_count++;
-            //Check for mine diagonal-uleft.
-            if (hasMineBoardArray[xCoord - 1, yCoord - 1] == true)
-                nearby_mine_count++;
-            //Check for mine diagonal-dleft.
-            if (hasMineBoardArray[xCoord - 1, yCoord + 1] == true)
-                nearby_mine_count++;
-            //Check for mine above 
-            if (hasMineBoardArray[xCoord, yCoord - 1] == true)
-                nearby_mine_count++;
-            //Check for mine below
-            if (hasMineBoardArray[xCoord, yCoord - 1] == true)
-                nearby_mine_count++;
+            //Prints top to bottom
+            for (int row = 0; row < vertical; row++)
+            {
+                if (row == 0)
+                {
+                    checkAbove = false;
+                }
+                else if (row == vertical - 1)
+                {
+                    checkBelow = false;
+                }
 
-            return nearby_mine_count;
-            
+                //Prints left to right
+                for (int column = 0; column < horizontal; column++)
+                {
+                    int columnIndex = column;
+                    int rowIndex = row;
+
+                    if (column == 0)
+                    {
+                        checkLeft = false;
+                    }
+                    if (column == horizontal - 1)
+                    {
+                        checkRight = false;
+                    }
+
+                    if (checkAbove == true)
+                    {
+                        //Check for mine above 
+                        if (hasMineBoardArray[columnIndex, rowIndex - 1] == true)
+                            nearbyMineCount++;
+
+                        if (checkLeft == true)
+                        {
+                            //Check for mine diagonal-uleft.
+                            if (hasMineBoardArray[columnIndex - 1, rowIndex - 1] == true)
+                                nearbyMineCount++;
+                        }
+                    }
+
+                    if (checkLeft == true)
+                    {
+                        // Check for mine to the left
+                        if (hasMineBoardArray[columnIndex - 1, rowIndex] == true)
+                            nearbyMineCount++;
+
+                        if (checkBelow == true)
+                        {
+                            //Check for mine diagonal-dleft.
+                            if (hasMineBoardArray[columnIndex - 1, rowIndex + 1] == true)
+                                nearbyMineCount++;
+                        }
+                    }
+
+                    if (checkBelow == true)
+                    {
+                        //Check for mine below
+                        if (hasMineBoardArray[columnIndex, rowIndex + 1] == true)
+                            nearbyMineCount++;
+
+                        if (checkRight == true)
+                        {
+                            // Check for mine diagonal-dright.
+                            if (hasMineBoardArray[columnIndex + 1, rowIndex + 1] == true)
+                                nearbyMineCount++;
+                        }
+
+                    }
+
+                    if (checkRight == true)
+                    {
+                        // Check for mine to the right.
+                        if (hasMineBoardArray[columnIndex + 1, rowIndex] == true)
+                            nearbyMineCount++;
+
+                        if (checkAbove == true)
+                        {
+                            // Check for mine diagonal-uright.
+                            if (hasMineBoardArray[columnIndex + 1, rowIndex - 1] == true)
+                                nearbyMineCount++;
+                        }
+                        
+                    }
+                    surroundingMinesArray[columnIndex, rowIndex] = nearbyMineCount;
+                    nearbyMineCount = 0;
+                }
+
+            }
         }
 
 
@@ -379,16 +445,16 @@ namespace ConsoleMinesweeper
         }
 
 
-        public int[,] SurroundingFlagsArray
+        public int[,] SurroundingMinesArray
         {
             get
             {
-                return surroundingFlagsArray;
+                return surroundingMinesArray;
             }
 
             set
             {
-                surroundingFlagsArray = value;
+                surroundingMinesArray = value;
             }
         }
 
