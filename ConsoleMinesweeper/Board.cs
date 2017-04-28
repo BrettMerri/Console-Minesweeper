@@ -19,6 +19,7 @@ namespace ConsoleMinesweeper
         private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
         private bool[,] isFlaggedBoardArray;
+        private int[,] surroundingFlagsArray;
 
         public Board()
         {
@@ -182,6 +183,45 @@ namespace ConsoleMinesweeper
             this.hasMineBoardArray = hasMineBoardArray;
         }
 
+
+        //Method to check for surrounding mines and input numbers corresponding to number of surrounding mines for each cell.
+        public int CheckForSurroundingMines(int xCoord, int yCoord)
+
+        {
+            int nearby_mine_count = 0;
+
+
+            // Check for mine to the left
+            if (hasMineBoardArray[xCoord + 1, yCoord] == true)
+                nearby_mine_count++;
+            // Check for mine to the right.
+            if (hasMineBoardArray[xCoord - 1, yCoord] == true)
+                nearby_mine_count++;
+            // Check for mine diagonal-dright.
+            if (hasMineBoardArray[xCoord + 1, yCoord + 1] == true)
+                nearby_mine_count++;
+            //Check for mine diagonal-uright.
+            if (hasMineBoardArray[xCoord + 1, yCoord - 1] == true)
+                nearby_mine_count++;
+            //Check for mine diagonal-uleft.
+            if (hasMineBoardArray[xCoord - 1, yCoord - 1] == true)
+                nearby_mine_count++;
+            //Check for mine diagonal-dleft.
+            if (hasMineBoardArray[xCoord - 1, yCoord + 1] == true)
+                nearby_mine_count++;
+            //Check for mine above 
+            if (hasMineBoardArray[xCoord, yCoord - 1] == true)
+                nearby_mine_count++;
+            //Check for mine below
+            if (hasMineBoardArray[xCoord, yCoord - 1] == true)
+                nearby_mine_count++;
+
+            return nearby_mine_count;
+            
+        }
+
+
+            #region properties
         public int Horizontal
         {
             get
@@ -298,5 +338,19 @@ namespace ConsoleMinesweeper
                 twoDigitYAxis = value;
             }
         }
+
+        public int[,] SurroundingFlagsArray
+        {
+            get
+            {
+                return surroundingFlagsArray;
+            }
+
+            set
+            {
+                surroundingFlagsArray = value;
+            }
+        }
+        #endregion
     }
 }

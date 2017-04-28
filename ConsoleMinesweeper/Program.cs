@@ -91,6 +91,8 @@ namespace ConsoleMinesweeper
             //Coordinants integers
             int xCoord;
             int yCoord;
+            int xCoordIndex;
+            int yCoordIndex;
 
             //Board size integers
             int horizontalBoardSize = currentBoard.Horizontal;
@@ -120,14 +122,16 @@ namespace ConsoleMinesweeper
 
                 //Prompt user for X coordinant
                 Console.Write("Enter value for X coordinate: ");
-                xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
+                xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1 ;
+              
 
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
-                yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
+                yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) -1 ;
+    
 
                 //Prompt user if he wants to select the flag the coordinate
-                Console.WriteLine($"Would you like to select or flag coordinate {xCoord},{yCoord}? (s/f): ");
+                Console.WriteLine($"Would you like to select or flag coordinate {xCoord + 1},{yCoord + 1}? (s/f): ");
                 string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
 
                 if (selection == "f")
@@ -142,6 +146,7 @@ namespace ConsoleMinesweeper
                     //Set the selected coordinant to true
                     //A true unavailableCells value makes the cell unavailable
                     currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
+                    //currentBoard.CheckForSurroundingMines[xCoord, yCoord]
                 }
 
             }
