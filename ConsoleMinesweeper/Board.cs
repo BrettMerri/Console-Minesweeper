@@ -13,86 +13,141 @@ namespace ConsoleMinesweeper
         private int vertical;
         private int mines;
 
-        public Board()
-        {
-            horizontal = 0;
-            vertical = 0;
-            mines = 0;
-        }
+        public Board() { }
 
-        public Board(int horizontal, int vertical, int mines)
+        public void CreateBoard(int[,] boardArray, bool[,] unavailableCells)
         {
-            this.horizontal = horizontal;
-            this.vertical = vertical;
-            this.mines = mines;
-        }
-
-        public void CreateBoard(int[,] boardArray, bool[,] availableCells)
-        {
-            bool twoDigitXAxis = false; //Initially set  TwoDigitXAxis and TwoDigitYAxis to false.
+            //Initially set TwoDigitXAxis and TwoDigitYAxis to false.
+            bool twoDigitXAxis = false; 
             bool twoDigitYAxis = false;
 
-            if (horizontal > 9) //Sets TwoDigitXAxis to true if Horizontal is greater than 9
+            //Sets TwoDigitXAxis to true if Horizontal is greater than 9
+            if (horizontal > 9) 
                 twoDigitXAxis = true;
-            if (vertical > 9) //Sets TwoDigitYAxis to true if Vertical is greater than 9
+
+            //Sets TwoDigitYAxis to true if Vertical is greater than 9
+            if (vertical > 9) 
                 twoDigitYAxis = true;
 
-            Console.WriteLine(); //Print new line before printing the board
+            //Print new line before printing the board
+            Console.WriteLine(); 
 
+            //Outer for loop: i = row
             for (int i = 0; i < vertical; i++)
             {
-                //If there will be 2-digit Y axis, print all the single digits in the Y axis with an extra space at the end so the board is aligned.
+                //If a 2-digit Y axis exists, print all the single digit axis with an extra space at the end so the axis aligns with the board
                 if (twoDigitYAxis == true && vertical - i < 10)
-                    Console.Write($"{vertical - i}  "); //Prints Y-axis coordinants with two spaces at the end
+                {
+                    //Prints Y-axis coordinants < 10 with two spaces at the end (1 digit + 2 spaces = 3 characters total)
+                    Console.Write($"{vertical - i}  ");
+                }
                 else
-                    Console.Write($"{vertical - i} "); //Prints Y-axis coordinants with one space at the end
+                {
+                    //Prints Y-axis coordinants > 10 with one space at the end (2 digits + 1 space = 3 characters total)
+                    Console.Write($"{vertical - i} ");
+                }
 
+                //Set console text color to White before printing the board
                 Console.ForegroundColor = ConsoleColor.White;
+
+                //Inner for loop: j = column
                 for (int j = 0; j < horizontal; j++)
                 {
-                    if (availableCells[j, Vertical - i - 1] == false)
+                    //j = the column index value
+                    //Vertical - i - 1 = the row index value
+                    //Checks if the value of the array is "not unavailable" (or available to be selected)
+                    if (unavailableCells[j, Vertical - i - 1] == false)
+                    {
+                        //Write "#" if the cell is availble to be selected
                         Console.Write("#");
+                    }
                     else
-                        Console.Write(string.Format("{0}", boardArray[j, Vertical - i - 1]));
+                    {
+                        //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
+                        Console.Write(boardArray[j, Vertical - i - 1].ToString());
+                    }
 
-                    //If there will be 2-digit X axis, write the board with an extra space after each element to algin the board with the axis.
+                    //If there a 2-digit X axis exists, write the board with an extra space after each element to algin the board with the axis.
                     if (twoDigitXAxis == true)
-                        Console.Write("  "); //Print board with two spaces at after each element
+                    {
+                        //Print board with two spaces after each element if 2-digit X axis values exist
+                        Console.Write("  "); 
+                    }
                     else
-                        Console.Write(" "); //Print board with one space after each element
+                    {
+                        //Print board with one space after each element if only 1-digit X axis values exist
+                        Console.Write(" "); 
+                    }
 
                 }
+                //Set console text color back to default (Gray) before printing the axis again
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine();
             }
 
-            //If there will be a 2-digit Y axis, print a three-space left-padding before printing the X-axis.
+            //If a 2-digit Y exists exists, write three-spaces before writing the X-axis to align with the board.
             if (twoDigitYAxis == true)
-                Console.Write("   "); //3 space left padding before the X-axis coodinants
+            {
+                //Write 3 spaces before the X-axis coodinants if 2-digit Y axis values exists
+                Console.Write("   "); 
+            }
             else
-                Console.Write("  "); //2 space left padding before the x-axis coordinants
+            {
+                //2 space left padding before the x-axis coordinants
+                Console.Write("  "); 
+            }
 
             for (int i = 0; i < horizontal; i++)
             {
                 //If there will be 2-digit X-axis, print all the single digit coordinants with an extra space at the end
                 if (twoDigitXAxis == true && i + 1 < 10)
-                    Console.Write($"{i + 1}  "); //Prints single-digit X-axis coordinants with two spaces at the end
+                {
+                    //Prints single-digit X-axis coordinants with two spaces at the end
+                    Console.Write($"{i + 1}  "); 
+                }
                 else
-                    Console.Write($"{i + 1} "); //Prints two-digit X-axis coordinants with one space at the end
+                {
+                    //Prints two-digit X-axis coordinants with one space at the end
+                    Console.Write($"{i + 1} "); 
+                }
             }
-            Console.Write("\n\n"); //Print two new lines after the board.
+
+            //Print two new lines after the board has printed.
+            Console.Write("\n\n"); 
 
         }
         public int[,] GenerateMines(int[,] emptyBoardArray)
         {
+            //Creates new random object
             Random r = new Random();
 
+            int randomHorizontalIndex;
+            int randomVerticalIndex;
+            int randomIndexValue;
+
+            //For each mine in the board
             for (int i = 0; i < mines; i++)
             {
-                if (emptyBoardArray[r.Next(0, horizontal), r.Next(0, vertical)] == 1)
+                //Generates a random number between 0 and horizontal board size
+                randomHorizontalIndex = r.Next(0, horizontal);
+
+                //Generates a random number between 0 and vertical board size
+                randomVerticalIndex = r.Next(0, vertical);
+
+                //Finds the value of the a random cell selected by the randomHorizontalIndex and the randomVerticalIndex
+                randomIndexValue = emptyBoardArray[randomHorizontalIndex, randomVerticalIndex];
+
+                //Selects a random index horizontally and vertically.
+                //If the selected value is already 1 (mine), decrement i so that the for loop loops an extra time.
+                if (randomIndexValue == 1)
+                {
                     i--;
+                }
                 else
-                    emptyBoardArray[r.Next(0, horizontal), r.Next(0, vertical)] = 1;
+                {
+                    //If the selected value is not 1 (mine), set that value to 1.
+                    emptyBoardArray[randomHorizontalIndex, randomVerticalIndex] = 1;
+                }
             }
             return emptyBoardArray;
         }

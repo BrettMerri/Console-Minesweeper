@@ -10,13 +10,18 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
-            //Add default console colors.
+            //Add title and default console colors
+            Console.Title = "Console Minesweeper";
             Console.BackgroundColor = ConsoleColor.Black; 
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            Console.WriteLine("Welcome to the Console Minesweeper!\n");
 
+            Console.WriteLine("Welcome to Console Minesweeper!\n");
+
+            //GetGameMode writes a menu and returns a board with the user-selected game mode
             Board currentBoard = GetGameMode();
+
+            //Starts a game with the currentBoard
             StartGame(currentBoard);
         }
 
@@ -60,15 +65,17 @@ namespace ConsoleMinesweeper
             //Custom mode
             else
             {
-                //Prompts user for the horizontal size, vertical size, and amount of mines
+                //Prompts user for the horizontal size
                 Console.Write("Horizontal size: ");
                 int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
+                //Prompts user for the vertical size
                 Console.Write("Vertical size: ");
                 int customVerticalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
                 int customArea = customHorizontalInput * customVerticalInput;
 
+                //Prompts user for the amount of mines (max mines = board area)
                 Console.Write("Amount of mines: ");
                 int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customArea);
 
@@ -78,29 +85,49 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public static void StartGame(Board newBoard)
+        public static void StartGame(Board currentBoard)
         {
+            //Coordinants integers
             int xCoord;
             int yCoord;
 
-            bool[,] availableCells = new bool[newBoard.Horizontal, newBoard.Vertical];
-            int[,] emptyBoardArray = new int[newBoard.Horizontal, newBoard.Vertical]; //Create a 2d array with all values as 0's
-            int[,] boardArray = newBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
+            //Board size integers
+            int horizontalBoardSize = currentBoard.Horizontal;
+            int verticalBoardSize = currentBoard.Vertical;
+
+            //2-D bool Array of unavailable cells. All values in array are initialized as "false"
+            bool[,] unavailableCells = new bool[horizontalBoardSize, verticalBoardSize]; 
+
+            //2-D int Array where all values are 0
+            int[,] emptyBoardArray = new int[horizontalBoardSize, verticalBoardSize];
+
+            //2-D int array with an mines added randomly throughout.
+            int[,] boardArray = currentBoard.GenerateMines(emptyBoardArray); //Populates 1's to the array randomly (mines)
 
             bool run = true;
             while (run)
             {
+                //Clear console before writing new board
                 Console.Clear();
-                Console.WriteLine($"\n=== {newBoard.Title} Mode - Mines: {newBoard.Mines} ===");
-                newBoard.CreateBoard(boardArray, availableCells); //Prints the board
 
-                Console.Write("Enter value for X coordinate: ");
-                xCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Horizontal) - 1;
+                //Write header showing what game mode and how many mines
+                Console.WriteLine($"=== {currentBoard.Title} Mode  ===");
+                Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
 
+                //Prints the board
+                currentBoard.CreateBoard(boardArray, unavailableCells); 
+
+                //Prompt user for X coordinant
+                Console.Write("Enter value for X coordinate: "); 
+                xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
+
+                //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
-                yCoord = ConsoleValidation.GetIntegerInRange(1, newBoard.Vertical) - 1;
+                yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
 
-                availableCells[xCoord, yCoord] = true;
+                //Set the selected coordinant to true
+                //A true unavailableCells value makes the cell unavailable
+                unavailableCells[xCoord, yCoord] = true;
             }
 
         }
