@@ -13,24 +13,23 @@ namespace ConsoleMinesweeper
         private int vertical;
         private int mines;
 
-        private bool[,] minesBoardArray;
+        private bool twoDigitXAxis;
+        private bool twoDigitYAxis;
+
+        private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
+        private bool[,] isFlaggedBoardArray;
 
         public Board()
         {
             //All board variables will come from EasyBoard.cs, MediumBoard.cs, HardBoard.cs, or CustomerBoard.cs
         }
 
-        public void CreateBoard(bool[,] flaggedBoardArray)
+        public void CreateBoard()
         {
-            //Initially set TwoDigitXAxis and TwoDigitYAxis to false.
-            bool twoDigitXAxis = false; 
-            bool twoDigitYAxis = false;
-
             //Sets TwoDigitXAxis to true if Horizontal is greater than 9
             if (horizontal > 9) 
                 twoDigitXAxis = true;
-
 
             //Sets TwoDigitYAxis to true if Vertical is greater than 9
             if (vertical > 9) 
@@ -43,23 +42,23 @@ namespace ConsoleMinesweeper
             for (int row = 0; row < vertical; row++)
             {
                 //Writes the Y Axis coordinants for this row to the console
-                WriteYAxisCoodinants(row, twoDigitYAxis);
+                WriteYAxisCoodinants(row);
 
                 //Writes the board values for this row
-                WriteBoardValues(flaggedBoardArray, row, twoDigitXAxis);
+                WriteBoardValues(row);
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
             }
 
-            WriteXAxisCoordinants(twoDigitXAxis, twoDigitYAxis);
+            WriteXAxisCoordinants();
 
             //Print two new lines after the board has printed.
             Console.Write("\n\n"); 
 
         }
 
-        public void WriteYAxisCoodinants(int row, bool twoDigitYAxis)
+        public void WriteYAxisCoodinants(int row)
         {
             //If a 2-digit Y axis exists, print all the single digit axis with an extra space at the end so the axis aligns with the board
             if (twoDigitYAxis == true && vertical - row < 10)
@@ -74,7 +73,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteXAxisCoordinants(bool twoDigitXAxis, bool twoDigitYAxis)
+        public void WriteXAxisCoordinants()
         {
             //If a 2-digit Y exists exists, write three-spaces before writing the X-axis to align with the board.
             if (twoDigitYAxis == true)
@@ -104,7 +103,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteBoardValues(bool[,] flaggedBoardArray, int row,  bool twoDigitXAxis)
+        public void WriteBoardValues(int row)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
@@ -122,11 +121,11 @@ namespace ConsoleMinesweeper
                 }
                 else
                 {
-                    if (flaggedBoardArray[column, vertical - row - 1] == true)
+                    if (isFlaggedBoardArray[column, vertical - row - 1] == true)
                         Console.Write("F");
                     else
                     //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
-                    Console.Write(minesBoardArray[column, vertical - row - 1].ToString());
+                    Console.Write(hasMineBoardArray[column, vertical - row - 1].ToString());
                 }
 
                 //If there a 2-digit X axis exists, write the board with an extra space after each element to algin the board with the axis.
@@ -155,7 +154,7 @@ namespace ConsoleMinesweeper
             int randomVerticalIndex;
             bool randomIndexValue;
 
-            bool[,] minesBoardArray = new bool[horizontal, vertical];
+            bool[,] hasMineBoardArray = new bool[horizontal, vertical];
 
             //For each mine in the board
             for (int i = 0; i < mines; i++)
@@ -167,7 +166,7 @@ namespace ConsoleMinesweeper
                 randomVerticalIndex = r.Next(0, vertical);
 
                 //Finds the value of the a random cell selected by the randomHorizontalIndex and the randomVerticalIndex
-                randomIndexValue = minesBoardArray[randomHorizontalIndex, randomVerticalIndex];
+                randomIndexValue = hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex];
 
                 //Selects a random index horizontally and vertically.
                 //If the selected value is already 1 (mine), decrement i so that the for loop loops an extra time.
@@ -176,11 +175,11 @@ namespace ConsoleMinesweeper
                 else
                 {
                     //If the selected value is not 1 (mine), set that value to 1.
-                    minesBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
+                    hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
                 }
             }
             //set the minesBoardArray for this object to the minesBoardArray created in this method
-            this.minesBoardArray = minesBoardArray;
+            this.hasMineBoardArray = hasMineBoardArray;
         }
 
         public int Horizontal
@@ -239,12 +238,12 @@ namespace ConsoleMinesweeper
         {
             get
             {
-                return minesBoardArray;
+                return hasMineBoardArray;
             }
 
             set
             {
-                minesBoardArray = value;
+                hasMineBoardArray = value;
             }
         }
 
@@ -258,6 +257,45 @@ namespace ConsoleMinesweeper
             set
             {
                 isSelectedBoardArray = value;
+            }
+        }
+
+        public bool[,] IsFlaggedBoardArray
+        {
+            get
+            {
+                return isFlaggedBoardArray;
+            }
+
+            set
+            {
+                isFlaggedBoardArray = value;
+            }
+        }
+
+        public bool TwoDigitXAxis
+        {
+            get
+            {
+                return twoDigitXAxis;
+            }
+
+            set
+            {
+                twoDigitXAxis = value;
+            }
+        }
+
+        public bool TwoDigitYAxis
+        {
+            get
+            {
+                return twoDigitYAxis;
+            }
+
+            set
+            {
+                twoDigitYAxis = value;
             }
         }
     }

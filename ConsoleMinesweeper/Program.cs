@@ -101,9 +101,8 @@ namespace ConsoleMinesweeper
             //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
             currentBoard.GenerateMinesBoardArray();
 
-
             //2D bool Array of flagged cells.  All values in array are initialized to "false"
-            bool[,] flaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
+            currentBoard.IsFlaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
             bool run = true;
             while (run)
@@ -116,7 +115,7 @@ namespace ConsoleMinesweeper
                 Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
 
                 //Prints the board
-                currentBoard.CreateBoard(flaggedBoardArray); 
+                currentBoard.CreateBoard(); 
 
                 //Prompt user for X coordinant
                 Console.Write("Enter value for X coordinate: ");
@@ -134,7 +133,7 @@ namespace ConsoleMinesweeper
                 {
                     //Set the selected coordinant to true
                     //A true flaggedBoardArray value makes the cell into a flag
-                    flaggedBoardArray[xCoord, yCoord] = true;
+                    currentBoard.IsFlaggedBoardArray[xCoord, yCoord] = true;
                     currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
                 }
                 else
