@@ -12,7 +12,7 @@ namespace ConsoleMinesweeper
         {
             //Add title and default console colors
             Console.Title = "Console Minesweeper";
-            Console.BackgroundColor = ConsoleColor.Black; 
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
 
 
@@ -101,6 +101,10 @@ namespace ConsoleMinesweeper
             //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
             currentBoard.GenerateMinesBoardArray();
 
+
+            //2D bool Array of flagged cells.  All values in array are initialized to "false"
+            bool[,] flaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
+
             bool run = true;
             while (run)
             {
@@ -112,22 +116,36 @@ namespace ConsoleMinesweeper
                 Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
 
                 //Prints the board
-                currentBoard.CreateBoard(); 
+                currentBoard.CreateBoard(flaggedBoardArray); 
 
                 //Prompt user for X coordinant
-                Console.Write("Enter value for X coordinate: "); 
+                Console.Write("Enter value for X coordinate: ");
                 xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
 
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
                 yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
 
-                //Set the selected coordinant to true
-                //A true isSelectedBoardArray value makes the cell unavailable
-                currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
+                //Prompt user if he wants to select the flag the coordinate
+                Console.WriteLine($"Would you like to select or flag coordinate {xCoord},{yCoord}? (s/f): ");
+                string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
+
+                if (selection == "f")
+                {
+                    //Set the selected coordinant to true
+                    //A true flaggedBoardArray value makes the cell into a flag
+                    flaggedBoardArray[xCoord, yCoord] = true;
+                    currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
+                }
+                else
+                {
+                    //Set the selected coordinant to true
+                    //A true unavailableCells value makes the cell unavailable
+                    currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
+                }
+
             }
-
         }
-
     }
 }
+

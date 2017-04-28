@@ -21,7 +21,7 @@ namespace ConsoleMinesweeper
             //All board variables will come from EasyBoard.cs, MediumBoard.cs, HardBoard.cs, or CustomerBoard.cs
         }
 
-        public void CreateBoard()
+        public void CreateBoard(bool[,] flaggedBoardArray)
         {
             //Initially set TwoDigitXAxis and TwoDigitYAxis to false.
             bool twoDigitXAxis = false; 
@@ -30,6 +30,7 @@ namespace ConsoleMinesweeper
             //Sets TwoDigitXAxis to true if Horizontal is greater than 9
             if (horizontal > 9) 
                 twoDigitXAxis = true;
+
 
             //Sets TwoDigitYAxis to true if Vertical is greater than 9
             if (vertical > 9) 
@@ -45,7 +46,7 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row, twoDigitYAxis);
 
                 //Writes the board values for this row
-                WriteBoardValues(row, twoDigitXAxis);
+                WriteBoardValues(flaggedBoardArray, row, twoDigitXAxis);
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
@@ -103,7 +104,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteBoardValues(int row,  bool twoDigitXAxis)
+        public void WriteBoardValues(bool[,] flaggedBoardArray, int row,  bool twoDigitXAxis)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
@@ -121,6 +122,9 @@ namespace ConsoleMinesweeper
                 }
                 else
                 {
+                    if (flaggedBoardArray[column, vertical - row - 1] == true)
+                        Console.Write("F");
+                    else
                     //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
                     Console.Write(minesBoardArray[column, vertical - row - 1].ToString());
                 }
