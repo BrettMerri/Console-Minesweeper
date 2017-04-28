@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Board.cs" />
     <Compile Include="ConsoleValidation.cs" />
+    <Compile Include="CustomBoard.cs" />
     <Compile Include="EasyBoard.cs" />
     <Compile Include="HardBoard.cs" />
     <Compile Include="MediumBoard.cs" />
