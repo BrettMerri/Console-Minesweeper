@@ -14,7 +14,8 @@ namespace ConsoleMinesweeper
             Console.Title = "Console Minesweeper";
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
-
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Console.SetWindowPosition(0, 0);
 
             Console.WriteLine("Welcome to Console Minesweeper!\n");
 
