@@ -50,7 +50,7 @@ namespace ConsoleMinesweeper
                 //If WriteBoardValues returns false (mine was selected) end the game
                 if (!WriteBoardValues(row))
                 {
-                    //RunGame = false;
+                    RunGame = false;
                 }
 
                 //Creates a new line before going on to the next row
@@ -256,7 +256,7 @@ namespace ConsoleMinesweeper
                     {
                         checkLeft = false;
                     }
-                    if (column == horizontal - 1)
+                    else if (column == horizontal - 1)
                     {
                         checkRight = false;
                     }
@@ -320,8 +320,11 @@ namespace ConsoleMinesweeper
                     }
                     surroundingMinesArray[columnIndex, rowIndex] = nearbyMineCount;
                     nearbyMineCount = 0;
+                    checkLeft = true;
+                    checkRight = true;
                 }
-
+                checkAbove = true;
+                checkBelow = true;
             }
         }
 
