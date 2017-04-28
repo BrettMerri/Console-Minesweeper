@@ -19,11 +19,19 @@ namespace ConsoleMinesweeper
 
             Console.WriteLine("Welcome to Console Minesweeper!\n");
 
-            //GetGameMode writes a menu and returns a board with the user-selected game mode
-            Board currentBoard = GetGameMode();
+            bool run = true;
 
-            //Starts a game with the currentBoard
-            StartGame(currentBoard);
+            while (run)
+            {
+                //GetGameMode writes a menu and returns a board with the user-selected game mode
+                Board currentBoard = GetGameMode();
+
+                //Starts a game with the currentBoard
+                StartGame(currentBoard);
+
+                if (!ContinueGame()) //Prompts user if he wants to continue. Set loop to false if use does not want to continue.
+                    run = false;
+            }
         }
 
         public static Board GetGameMode()
@@ -102,13 +110,10 @@ namespace ConsoleMinesweeper
             //2D bool Array of flagged cells.  All values in array are initialized to "false".
             currentBoard.IsFlaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
-            //Set run to true so we can make it false when the game is over.
-            bool run = true;
-
             //Set firstRun to true so the mines will be generated only after the first selection is made.
             bool firstRun = true;
 
-            while (run)
+            while (true)
             {
                 //Clear console before writing new board
                 Console.Clear();
@@ -119,6 +124,12 @@ namespace ConsoleMinesweeper
 
                 //Prints the board
                 currentBoard.CreateBoard(); 
+
+                if (currentBoard.RunGame == false)
+                {
+                    endGame();
+                    return;
+                }
 
                 //Prompt user for X coordinant
                 Console.Write("Enter value for X coordinate: ");
@@ -157,6 +168,25 @@ namespace ConsoleMinesweeper
 
             }
         }
+
+        public static void endGame()
+        {
+            Console.WriteLine("You found a mine! Game over.");
+        }
+
+        public static bool ContinueGame()
+        {
+            Console.Write("Do you want to play again? (y/n): "); //Prompt user to type y or n
+            string input = ConsoleValidation.GetValidString(new string[] { "y", "n" }); //Gets validated string from the user that is either y or n.
+            if (input == "y") //If input is y, write new line and return true
+            {
+                Console.Clear();
+                return true;
+            }
+            else //If inpus is n, return false
+                return false;
+        }
+
     }
 }
 
