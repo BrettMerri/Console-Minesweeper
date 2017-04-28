@@ -10,7 +10,7 @@ namespace ConsoleMinesweeper
     {
         static void Main(string[] args)
         {
-            //Add title and default console colors
+            //Add console title, console colors, console window size, and console window position
             Console.Title = "Console Minesweeper";
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -19,11 +19,19 @@ namespace ConsoleMinesweeper
 
             Console.WriteLine("Welcome to Console Minesweeper!\n");
 
-            //GetGameMode writes a menu and returns a board with the user-selected game mode
-            Board currentBoard = GetGameMode();
+            bool run = true;
 
-            //Starts a game with the currentBoard
-            StartGame(currentBoard);
+            while (run)
+            {
+                //GetGameMode writes a menu and returns a board with the user-selected game mode
+                Board currentBoard = GetGameMode();
+
+                //Starts a game with the currentBoard
+                StartGame(currentBoard);
+
+                if (!ContinueGame()) //Prompts user if he wants to continue. Set loop to false if use does not want to continue.
+                    run = false;
+            }
         }
 
         public static Board GetGameMode()
@@ -67,18 +75,18 @@ namespace ConsoleMinesweeper
             else
             {
                 //Prompts user for the horizontal size
-                Console.Write("Horizontal size: ");
+                Console.Write("Horizontal size (3-30): ");
                 int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
                 //Prompts user for the vertical size
-                Console.Write("Vertical size: ");
+                Console.Write("Vertical size (3-30): ");
                 int customVerticalInput = ConsoleValidation.GetIntegerInRange(3, 30);
 
-                int customArea = customHorizontalInput * customVerticalInput;
+                int customBoardArea = customHorizontalInput * customVerticalInput;
 
-                //Prompts user for the amount of mines (max mines = board area)
-                Console.Write("Amount of mines: ");
-                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customArea);
+                //Prompts user for the amount of mines (max mines = custom board area - 1)
+                Console.Write($"Amount of mines (1-{customBoardArea - 1}): ");
+                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea - 1);
 
                 //Start game with the custom board
                 Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
@@ -89,10 +97,10 @@ namespace ConsoleMinesweeper
         public static void StartGame(Board currentBoard)
         {
             //Coordinants integers
-            int xCoord;
-            int yCoord;
+
             int xCoordIndex;
             int yCoordIndex;
+
 
             //Board size integers
             int horizontalBoardSize = currentBoard.Horizontal;
@@ -101,14 +109,13 @@ namespace ConsoleMinesweeper
             //Sets the board's 2-D array, isSelectedBoardArray, to the size of the board. All values start as false.
             currentBoard.IsSelectedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
-            //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
-            currentBoard.GenerateMinesBoardArray();
-
-            //2D bool Array of flagged cells.  All values in array are initialized to "false"
+            //2D bool Array of flagged cells.  All values in array are initialized to "false".
             currentBoard.IsFlaggedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
-            bool run = true;
-            while (run)
+            //Set firstRun to true so the mines will be generated only after the first selection is made.
+            bool firstRun = true;
+
+            while (true)
             {
                 //Clear console before writing new board
                 Console.Clear();
@@ -120,37 +127,75 @@ namespace ConsoleMinesweeper
                 //Prints the board
                 currentBoard.CreateBoard(); 
 
+                if (currentBoard.RunGame == false)
+                {
+                    endGame();
+                    return;
+                }
+
                 //Prompt user for X coordinant
                 Console.Write("Enter value for X coordinate: ");
-                xCoord = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1 ;
-              
+
+                xCoordIndex = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
+
 
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
-                yCoord = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) -1 ;
-    
+
+                yCoordIndex = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
+
 
                 //Prompt user if he wants to select the flag the coordinate
-                Console.WriteLine($"Would you like to select or flag coordinate {xCoord + 1},{yCoord + 1}? (s/f): ");
+
+                Console.WriteLine($"Would you like to Select or Flag coordinate {xCoordIndex + 1},{yCoordIndex + 1}? (s/f): ");
+
                 string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
 
                 if (selection == "f")
                 {
                     //Set the selected coordinant to true
                     //A true flaggedBoardArray value makes the cell into a flag
-                    currentBoard.IsFlaggedBoardArray[xCoord, yCoord] = true;
-                    currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
+                    currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
+                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
                 }
                 else
                 {
                     //Set the selected coordinant to true
-                    //A true unavailableCells value makes the cell unavailable
-                    currentBoard.IsSelectedBoardArray[xCoord, yCoord] = true;
-                    //currentBoard.CheckForSurroundingMines[xCoord, yCoord]
+                    //A true IsSelectedBoardArray value makes the cell unavailable
+                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+                }
+
+                if (firstRun == true)
+                {
+                    //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
+                    currentBoard.GenerateMinesBoardArray(xCoordIndex, yCoordIndex);
+
+                    //Set firstRun to false afterwards so we only generate the mine locations once.
+                    firstRun = false;
+
                 }
 
             }
         }
+
+        public static void endGame()
+        {
+            Console.WriteLine("You found a mine! Game over.");
+        }
+
+        public static bool ContinueGame()
+        {
+            Console.Write("Do you want to play again? (y/n): "); //Prompt user to type y or n
+            string input = ConsoleValidation.GetValidString(new string[] { "y", "n" }); //Gets validated string from the user that is either y or n.
+            if (input == "y") //If input is y, write new line and return true
+            {
+                Console.Clear();
+                return true;
+            }
+            else //If inpus is n, return false
+                return false;
+        }
+
     }
 }
 

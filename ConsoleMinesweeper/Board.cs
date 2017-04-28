@@ -15,6 +15,7 @@ namespace ConsoleMinesweeper
 
         private bool twoDigitXAxis;
         private bool twoDigitYAxis;
+        private bool runGame = true;
 
         private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
@@ -46,7 +47,11 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row);
 
                 //Writes the board values for this row
-                WriteBoardValues(row);
+                //If WriteBoardValues returns false (mine was selected) end the game
+                if (!WriteBoardValues(row))
+                {
+                    RunGame = false;
+                }
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
@@ -104,29 +109,53 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void WriteBoardValues(int row)
+        public bool WriteBoardValues(int row)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
 
+            bool mineSelected = false;
+
             //Inner for loop: columns
             for (int column = 0; column < horizontal; column++)
             {
-                //column  = column index value
-                //Vertical - i - 1 = the row index value
-                //Checks if the value of the array is "not unavailable" (or available to be selected)
-                if (isSelectedBoardArray[column, vertical - row - 1] == false)
+                //Column index = column 
+                //Row index = vertical - i - 1
+                int columnIndex = column;
+                int rowIndex = vertical - row - 1;
+
+                //Checks if cell is selected
+                if (isSelectedBoardArray[columnIndex, rowIndex] == false)
                 {
                     //Write "#" if the cell is availble to be selected
                     Console.Write("#");
                 }
                 else
                 {
-                    if (isFlaggedBoardArray[column, vertical - row - 1] == true)
+                    //Write a green "F" if the cell is flagged
+                    if (isFlaggedBoardArray[columnIndex, rowIndex] == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("F");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    //If cell is not flagged
                     else
-                    //Write the integer value of boardArray if the cell has been chosen already (or unavailable to be selected)
-                    Console.Write(hasMineBoardArray[column, vertical - row - 1].ToString());
+                    {
+                        //If there is no mine, write "_"
+                        if (hasMineBoardArray[columnIndex, rowIndex] == false)
+                        {
+                            Console.Write("_");
+                        }
+                        //If there is a mine, write a red "X" and set mineSelected to true
+                        else
+                        {
+                            mineSelected = true;
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("X");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                 }
 
                 //If there a 2-digit X axis exists, write the board with an extra space after each element to algin the board with the axis.
@@ -144,9 +173,21 @@ namespace ConsoleMinesweeper
 
             //Set console text color back to default (Gray)
             Console.ForegroundColor = ConsoleColor.Gray;
+
+            //If a mine is selected, return false and end the game
+            if (mineSelected == true)
+            {
+                return false;
+            }
+            
+            //If a mine was not selected, return true and continue the game
+            else
+            {
+                return true;
+            }
         }
 
-        public void GenerateMinesBoardArray()
+        public void GenerateMinesBoardArray(int xCoordIndex, int yCoordIndex)
         {
             //Creates new random object
             Random r = new Random();
@@ -154,8 +195,6 @@ namespace ConsoleMinesweeper
             int randomHorizontalIndex;
             int randomVerticalIndex;
             bool randomIndexValue;
-
-            bool[,] hasMineBoardArray = new bool[horizontal, vertical];
 
             //For each mine in the board
             for (int i = 0; i < mines; i++)
@@ -170,8 +209,10 @@ namespace ConsoleMinesweeper
                 randomIndexValue = hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex];
 
                 //Selects a random index horizontally and vertically.
-                //If the selected value is already 1 (mine), decrement i so that the for loop loops an extra time.
-                if (randomIndexValue == true)
+                //If the selected value is true (mine), decrement i so that the for loop loops an extra time.
+                //If the random coordinants = the first selected coordinants, decrement i so that the for loops loops an extra time.
+                if (randomIndexValue == true ||
+                   (randomHorizontalIndex == xCoordIndex && randomVerticalIndex == yCoordIndex))
                     i--;
                 else
                 {
@@ -179,8 +220,6 @@ namespace ConsoleMinesweeper
                     hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
                 }
             }
-            //set the minesBoardArray for this object to the minesBoardArray created in this method
-            this.hasMineBoardArray = hasMineBoardArray;
         }
 
 
@@ -274,7 +313,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public bool[,] MinesBoardArray
+        public bool[,] HasMineBoardArray
         {
             get
             {
@@ -339,6 +378,7 @@ namespace ConsoleMinesweeper
             }
         }
 
+
         public int[,] SurroundingFlagsArray
         {
             get
@@ -349,6 +389,20 @@ namespace ConsoleMinesweeper
             set
             {
                 surroundingFlagsArray = value;
+            }
+        }
+
+       
+        public bool RunGame
+        {
+            get
+            {
+                return runGame;
+            }
+
+            set
+            {
+                runGame = value;
             }
         }
         #endregion
