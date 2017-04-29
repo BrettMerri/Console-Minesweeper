@@ -181,7 +181,9 @@ namespace ConsoleMinesweeper
 
         public static void endGame()
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("You found a mine! Game over.");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static bool ContinueGame()

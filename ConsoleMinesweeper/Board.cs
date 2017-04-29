@@ -223,25 +223,33 @@ namespace ConsoleMinesweeper
         }
 
 
-        //Method to check for surrounding mines and input numbers corresponding to number of surrounding mines for each cell.
+        //Uses the minesBoardArray to create the "board behind" containing the numbers of the surrounding mines
         public void CheckForSurroundingMines()
         {
+            //Initialize nearbyMineCount to 0
             int nearbyMineCount = 0;
 
+            //Declare the lastRowIndex and lastColumnIndex. These are used so we don't go out of bounds in the array
+            int lastRowIndex = vertical - 1;
+            int lastColumnIndex = horizontal - 1;
+
+            //Initialize bools specifying which directions we can check for bombs in the minesBoardArray without going out of bounds
             bool checkAbove = true;
             bool checkBelow = true;
             bool checkLeft = true;
             bool checkRight = true;
 
-
             //Prints top to bottom
             for (int row = 0; row < vertical; row++)
             {
+                //If the cell is in the first row, do not check the values above
                 if (row == 0)
                 {
                     checkAbove = false;
                 }
-                else if (row == vertical - 1)
+
+                //If the cell is in the last row, do not check the values below
+                else if (row == lastRowIndex)
                 {
                     checkBelow = false;
                 }
@@ -249,87 +257,103 @@ namespace ConsoleMinesweeper
                 //Prints left to right
                 for (int column = 0; column < horizontal; column++)
                 {
-                    int columnIndex = column;
-                    int rowIndex = row;
-
+                    //If the cell is in the first column, do not check the values to the left
                     if (column == 0)
                     {
                         checkLeft = false;
                     }
-                    else if (column == horizontal - 1)
+
+                    //If the cell is in the last column, do not check the values to the right
+                    else if (column == lastColumnIndex)
                     {
                         checkRight = false;
                     }
 
+                    //If we can check above
                     if (checkAbove == true)
                     {
                         //Check for mine above 
-                        if (hasMineBoardArray[columnIndex, rowIndex - 1] == true)
+                        if (hasMineBoardArray[column, row - 1] == true)
                             nearbyMineCount++;
 
+                        //If we can check above and to the left
                         if (checkLeft == true)
                         {
                             //Check for mine diagonal-uleft.
-                            if (hasMineBoardArray[columnIndex - 1, rowIndex - 1] == true)
+                            if (hasMineBoardArray[column - 1, row - 1] == true)
                                 nearbyMineCount++;
                         }
                     }
 
+                    //If we can check left
                     if (checkLeft == true)
                     {
                         // Check for mine to the left
-                        if (hasMineBoardArray[columnIndex - 1, rowIndex] == true)
+                        if (hasMineBoardArray[column - 1, row] == true)
                             nearbyMineCount++;
 
+                        //If we can check left and below
                         if (checkBelow == true)
                         {
                             //Check for mine diagonal-dleft.
-                            if (hasMineBoardArray[columnIndex - 1, rowIndex + 1] == true)
+                            if (hasMineBoardArray[column - 1, row + 1] == true)
                                 nearbyMineCount++;
                         }
                     }
 
+                    //If we can check below
                     if (checkBelow == true)
                     {
                         //Check for mine below
-                        if (hasMineBoardArray[columnIndex, rowIndex + 1] == true)
+                        if (hasMineBoardArray[column, row + 1] == true)
                             nearbyMineCount++;
 
+                        //If we can check below and right
                         if (checkRight == true)
                         {
                             // Check for mine diagonal-dright.
-                            if (hasMineBoardArray[columnIndex + 1, rowIndex + 1] == true)
+                            if (hasMineBoardArray[column + 1, row + 1] == true)
                                 nearbyMineCount++;
                         }
 
                     }
-
+                    
+                    //If we can check right
                     if (checkRight == true)
                     {
                         // Check for mine to the right.
-                        if (hasMineBoardArray[columnIndex + 1, rowIndex] == true)
+                        if (hasMineBoardArray[column + 1, row] == true)
                             nearbyMineCount++;
 
+                        //If we can check right and above
                         if (checkAbove == true)
                         {
                             // Check for mine diagonal-uright.
-                            if (hasMineBoardArray[columnIndex + 1, rowIndex - 1] == true)
+                            if (hasMineBoardArray[column + 1, row - 1] == true)
                                 nearbyMineCount++;
                         }
                         
                     }
-                    surroundingMinesArray[columnIndex, rowIndex] = nearbyMineCount;
+
+                    //Once we check all all of the areas around the cell as we can
+                    //Set the value for that index in the surroundingMinesArray to the number of mines that were found
+                    surroundingMinesArray[column, row] = nearbyMineCount;
+
+                    //Reset the nearbyMineCount and checkLeft/checkRight values before checking the next cell in this row
                     nearbyMineCount = 0;
                     checkLeft = true;
                     checkRight = true;
                 }
+
+                //Reset the nearbyMineCount and checkAbove/checkBelow values before checking the next cell in this column
+                nearbyMineCount = 0;
                 checkAbove = true;
                 checkBelow = true;
             }
         }
 
 
-            #region properties
+        #region Properties
         public int Horizontal
         {
             get
