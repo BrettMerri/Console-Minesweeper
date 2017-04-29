@@ -13,6 +13,9 @@ namespace ConsoleMinesweeper
         private int vertical;
         private int mines;
 
+        private int lastChosenXIndex;
+        private int lastChosenYIndex;
+
         private bool twoDigitXAxis;
         private bool twoDigitYAxis;
         private bool runGame = true;
@@ -47,11 +50,8 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row);
 
                 //Writes the board values for this row
-                //If WriteBoardValues returns false (mine was selected) end the game
-                if (!WriteBoardValues(row))
-                {
-                    RunGame = false;
-                }
+                //If WriteBoardValues writes a mine, runGame is set to false and the game will be over
+                WriteBoardValues(row);
 
                 //Creates a new line before going on to the next row
                 Console.WriteLine();
@@ -109,14 +109,12 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public bool WriteBoardValues(int row)
+        public void WriteBoardValues(int row)
         {
             //Set console text color to White before printing the board
             Console.ForegroundColor = ConsoleColor.White;
 
-            bool mineSelected = false;
-
-            //Inner for loop: columns
+            //Inner for loop: writes columns values
             for (int column = 0; column < horizontal; column++)
             {
                 //Column index = column 
@@ -124,7 +122,7 @@ namespace ConsoleMinesweeper
                 int columnIndex = column;
                 int rowIndex = vertical - row - 1;
 
-                //Checks if cell is selected
+                //Checks if cell is not selected
                 if (isSelectedBoardArray[columnIndex, rowIndex] == false)
                 {
                     //Write "#" if the cell is availble to be selected
@@ -145,12 +143,22 @@ namespace ConsoleMinesweeper
                         //If there is no mine, write "_"
                         if (hasMineBoardArray[columnIndex, rowIndex] == false)
                         {
-                            Console.Write(surroundingMinesArray[columnIndex, rowIndex].ToString());
+                            int surroundingMinesArrayValue = surroundingMinesArray[columnIndex, rowIndex];
+
+                            if (surroundingMinesArrayValue == 0)
+                            {
+                                Console.Write(" ");
+                            }
+
+                            else
+                            {
+                                Console.Write(surroundingMinesArrayValue);
+                            }
                         }
                         //If there is a mine, write a red "X" and set mineSelected to true
                         else
                         {
-                            mineSelected = true;
+                            RunGame = false;
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write("X");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -173,18 +181,6 @@ namespace ConsoleMinesweeper
 
             //Set console text color back to default (Gray)
             Console.ForegroundColor = ConsoleColor.Gray;
-
-            //If a mine is selected, return false and end the game
-            if (mineSelected == true)
-            {
-                return false;
-            }
-            
-            //If a mine was not selected, return true and continue the game
-            else
-            {
-                return true;
-            }
         }
 
         public void GenerateMinesBoardArray(int xCoordIndex, int yCoordIndex)

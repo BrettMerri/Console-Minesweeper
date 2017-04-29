@@ -137,12 +137,10 @@ namespace ConsoleMinesweeper
 
                 xCoordIndex = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
 
-
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
 
                 yCoordIndex = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
-
 
                 //Prompt user if he wants to select the flag the coordinate
 
@@ -181,9 +179,7 @@ namespace ConsoleMinesweeper
 
                     //Set firstRun to false afterwards so we only generate the mine locations once.
                     firstRun = false;
-
                 }
-
             }
         }
 
