@@ -101,7 +101,6 @@ namespace ConsoleMinesweeper
             int xCoordIndex;
             int yCoordIndex;
 
-
             //Board size integers
             int horizontalBoardSize = currentBoard.Horizontal;
             int verticalBoardSize = currentBoard.Vertical;
@@ -147,24 +146,33 @@ namespace ConsoleMinesweeper
 
                 //Prompt user if he wants to select the flag the coordinate
 
-                Console.WriteLine($"Would you like to Select or Flag coordinate {xCoordIndex + 1},{yCoordIndex + 1}? (s/f): ");
+                Console.WriteLine($"Would you like to [S]elect or [F]lag or [C]ancel coordinate {xCoordIndex + 1}, {yCoordIndex + 1}? (s/f/c): ");
 
-                string selection = ConsoleValidation.GetValidString(new string[] { "s", "f" });
+                string selection = ConsoleValidation.GetValidString(new string[] { "s", "f", "c" });
 
-                if (selection == "f")
+                //If user selectes "s" for Select
+                if (selection == "s")
+                {
+                    //Set the selected coordinant to true in IsSelectedBoardArray
+                    //A true IsSelectedBoardArray value makes the cell unavailable
+                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+                }
+                
+                //If user selected "f" for Flag
+                else if (selection == "f")
                 {
                     //Set the selected coordinant to true
                     //A true flaggedBoardArray value makes the cell into a flag
                     currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
                     currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
                 }
+
+                //If user selected "c" for Cancel
                 else
                 {
-                    //Set the selected coordinant to true
-                    //A true IsSelectedBoardArray value makes the cell unavailable
-                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+                    //Restarts the while loop without changing any values in the array
+                    continue;
                 }
-
                 if (firstRun == true)
                 {
                     //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
