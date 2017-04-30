@@ -12,7 +12,7 @@ namespace ConsoleMinesweeper
         {
             //Add console title, console colors, console window size, and console window position
             Console.Title = "Console Minesweeper";
-            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Console.SetWindowPosition(0, 0);

@@ -327,9 +327,9 @@ namespace ConsoleMinesweeper
                             if (surroundingMinesArrayValue == 1)
                                 color = "blue";
                             else if (surroundingMinesArrayValue == 2)
-                                color = "green";
+                                color = "darkgreen";
                             else if (surroundingMinesArrayValue == 3)
-                                color = "red";
+                                color = "darkred";
                             else if (surroundingMinesArrayValue == 4)
                                 color = "darkblue";
                             else if (surroundingMinesArrayValue == 5)
