@@ -176,9 +176,15 @@ namespace ConsoleMinesweeper
                     //Toggle coordinant between true and false
                     //A true flaggedBoardArray value makes the cell into a flag
                     if (currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] == false)
+                    {
                         currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
+                        currentBoard.Mines--;
+                    }
                     else
+                    {
                         currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = false;
+                        currentBoard.Mines++;
+                    }
                 }
 
                 //If user selected "c" for Cancel

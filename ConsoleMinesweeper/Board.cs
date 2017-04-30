@@ -24,7 +24,7 @@ namespace ConsoleMinesweeper
         bool checkLeft = true;
         bool checkRight = true;
 
-        private bool runGame = true;
+        private bool loseGame;
 
         private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
@@ -56,7 +56,7 @@ namespace ConsoleMinesweeper
                 WriteYAxisCoodinants(row);
 
                 //Writes the board values for this row
-                //If WriteBoardValues writes a mine, runGame is set to false and the game will be over
+                //If WriteBoardValues writes a mine, loseGame is set to false and the game will be over
                 WriteBoardValues(row);
 
                 //Creates a new line before going on to the next row
@@ -298,7 +298,7 @@ namespace ConsoleMinesweeper
                     //Write a green "F" if the cell is flagged
                     if (isFlaggedBoardArray[columnIndex, rowIndex] == true)
                     {
-                        Program.PrintColoredString("F", "green");
+                        Program.PrintColoredString("F", "darkgreen");
                     }
                     else
                     {
@@ -347,7 +347,7 @@ namespace ConsoleMinesweeper
                     //If there is a mine, write a red "X" and set mineSelected to true
                     else
                     {
-                        RunGame = false;
+                        loseGame = true;
                         Program.PrintColoredString("X", "darkred");
                     }
                 }
@@ -773,16 +773,16 @@ namespace ConsoleMinesweeper
         }
 
        
-        public bool RunGame
+        public bool LoseGame
         {
             get
             {
-                return runGame;
+                return loseGame;
             }
 
             set
             {
-                runGame = value;
+                loseGame = value;
             }
         }
 
