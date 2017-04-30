@@ -18,6 +18,12 @@ namespace ConsoleMinesweeper
 
         private bool twoDigitXAxis;
         private bool twoDigitYAxis;
+
+        bool checkAbove = true;
+        bool checkBelow = true;
+        bool checkLeft = true;
+        bool checkRight = true;
+
         private bool runGame = true;
 
         private bool[,] hasMineBoardArray;
@@ -220,6 +226,49 @@ namespace ConsoleMinesweeper
             }
         }
 
+        public void CheckXBoundaries(int xIndex)
+        {
+            int lastXIndex = horizontal - 1;
+            checkLeft = true;
+            checkRight = true;
+
+            //If the cell is in the first row, do not check the values above
+            if (xIndex == 0)
+            {
+                checkLeft = false;
+            }
+
+            //If the cell is in the last row, do not check the values below
+            else if (xIndex == lastXIndex)
+            {
+                checkRight = false;
+            }
+        }
+
+        public void CheckYBoundaries(int yIndex)
+        {
+            int lastYIndex = vertical - 1;
+            checkBelow = true;
+            checkAbove = true;
+
+            //If the cell is in the first row, do not check the values above
+            if (yIndex == 0)
+            {
+                checkAbove = false;
+            }
+
+            //If the cell is in the last row, do not check the values below
+            else if (yIndex == lastYIndex)
+            {
+                checkBelow = false;
+            }
+        }
+
+        public void CheckBothBoundaries(int xIndex, int yIndex)
+        {
+            CheckXBoundaries(xIndex);
+            CheckYBoundaries(yIndex);
+        }
 
         //Uses the minesBoardArray to create the "board behind" containing the numbers of the surrounding mines
         public void CheckForSurroundingMines()
@@ -231,41 +280,19 @@ namespace ConsoleMinesweeper
             int lastRowIndex = vertical - 1;
             int lastColumnIndex = horizontal - 1;
 
-            //Initialize bools specifying which directions we can check for bombs in the minesBoardArray without going out of bounds
-            bool checkAbove = true;
-            bool checkBelow = true;
-            bool checkLeft = true;
-            bool checkRight = true;
-
             //Prints top to bottom
             for (int row = 0; row < vertical; row++)
             {
-                //If the cell is in the first row, do not check the values above
-                if (row == 0)
-                {
-                    checkAbove = false;
-                }
+                //row = Y coordinate index
+                CheckYBoundaries(row);
 
                 //If the cell is in the last row, do not check the values below
-                else if (row == lastRowIndex)
-                {
-                    checkBelow = false;
-                }
 
                 //Prints left to right
                 for (int column = 0; column < horizontal; column++)
                 {
-                    //If the cell is in the first column, do not check the values to the left
-                    if (column == 0)
-                    {
-                        checkLeft = false;
-                    }
-
-                    //If the cell is in the last column, do not check the values to the right
-                    else if (column == lastColumnIndex)
-                    {
-                        checkRight = false;
-                    }
+                    //column = X coordinate index
+                    CheckXBoundaries(column);
 
                     //If we can check above
                     if (checkAbove == true)
@@ -520,6 +547,58 @@ namespace ConsoleMinesweeper
             set
             {
                 chosenYIndex = value;
+            }
+        }
+
+        public bool CheckAbove
+        {
+            get
+            {
+                return checkAbove;
+            }
+
+            set
+            {
+                checkAbove = value;
+            }
+        }
+
+        public bool CheckBelow
+        {
+            get
+            {
+                return checkBelow;
+            }
+
+            set
+            {
+                checkBelow = value;
+            }
+        }
+
+        public bool CheckLeft
+        {
+            get
+            {
+                return checkLeft;
+            }
+
+            set
+            {
+                checkLeft = value;
+            }
+        }
+
+        public bool CheckRight
+        {
+            get
+            {
+                return checkRight;
+            }
+
+            set
+            {
+                checkRight = value;
             }
         }
         #endregion

@@ -75,18 +75,19 @@ namespace ConsoleMinesweeper
             else
             {
                 //Prompts user for the horizontal size
-                Console.Write("Horizontal size (3-30): ");
-                int customHorizontalInput = ConsoleValidation.GetIntegerInRange(3, 30);
+                Console.Write("Horizontal size (5-30): ");
+                int customHorizontalInput = ConsoleValidation.GetIntegerInRange(5, 30);
 
                 //Prompts user for the vertical size
-                Console.Write("Vertical size (3-30): ");
-                int customVerticalInput = ConsoleValidation.GetIntegerInRange(3, 30);
+                Console.Write("Vertical size (5-30): ");
+                int customVerticalInput = ConsoleValidation.GetIntegerInRange(5, 30);
 
                 int customBoardArea = customHorizontalInput * customVerticalInput;
 
-                //Prompts user for the amount of mines (max mines = custom board area - 1)
-                Console.Write($"Amount of mines (1-{customBoardArea - 1}): ");
-                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea - 1);
+                //Prompts user for the amount of mines (max mines = customBoardArea - 9)
+                //customBoardArea - 9 is so we can ensure that the user's first click is a 0.
+                Console.Write($"Amount of mines (1-{customBoardArea - 9}): ");
+                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea - 9);
 
                 //Start game with the custom board
                 Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
@@ -128,6 +129,7 @@ namespace ConsoleMinesweeper
                 //Prints the board
                 currentBoard.CreateBoard(); 
 
+                //If the user selected a mine, end the game
                 if (currentBoard.RunGame == false)
                 {
                     endGame();
@@ -191,6 +193,7 @@ namespace ConsoleMinesweeper
                     currentBoard.GenerateMinesBoardArray(xCoordIndex, yCoordIndex);
                     currentBoard.CheckForSurroundingMines();
 
+
                     //Set firstRun to false afterwards so we only generate the mine locations once.
                     firstRun = false;
                 }
@@ -201,7 +204,7 @@ namespace ConsoleMinesweeper
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("You found a mine! Game over.");
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public static bool ContinueGame()
