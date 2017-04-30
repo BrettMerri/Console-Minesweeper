@@ -150,7 +150,6 @@ namespace ConsoleMinesweeper
                     if (revealedAroundZeroArray[xIndex + 1, yIndex + 1])
                         return true;
                 }
-
             }
 
             //If we can check right
@@ -168,6 +167,8 @@ namespace ConsoleMinesweeper
                         return true;
                 }
             }
+
+            //Return false if there are no surrounding zero's.
             return false;
         }
 
@@ -281,7 +282,7 @@ namespace ConsoleMinesweeper
         public void WriteBoardValues(int row)
         {
             //Set console text color to White before printing the board
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
 
             //Inner for loop: writes columns values
             for (int column = 0; column < horizontal; column++)
@@ -297,9 +298,7 @@ namespace ConsoleMinesweeper
                     //Write a green "F" if the cell is flagged
                     if (isFlaggedBoardArray[columnIndex, rowIndex] == true)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("F");
-                        Console.ForegroundColor = ConsoleColor.White;
+                        Program.PrintColoredString("F", "green");
                     }
                     else
                     {
@@ -321,18 +320,35 @@ namespace ConsoleMinesweeper
                             Console.Write(" ");
                         }
 
+                        //If there are surrounding mines (print 1-8 in a certain color)
                         else
                         {
-                            Console.Write(surroundingMinesArrayValue);
+                            string color;
+                            if (surroundingMinesArrayValue == 1)
+                                color = "blue";
+                            else if (surroundingMinesArrayValue == 2)
+                                color = "green";
+                            else if (surroundingMinesArrayValue == 3)
+                                color = "red";
+                            else if (surroundingMinesArrayValue == 4)
+                                color = "darkblue";
+                            else if (surroundingMinesArrayValue == 5)
+                                color = "darkred";
+                            else if (surroundingMinesArrayValue == 6)
+                                color = "cyan";
+                            else if (surroundingMinesArrayValue == 7)
+                                color = "black";
+                            else
+                                color = "gray";
+
+                            Program.PrintColoredString(surroundingMinesArrayValue.ToString(), color);
                         }
                     }
                     //If there is a mine, write a red "X" and set mineSelected to true
                     else
                     {
                         RunGame = false;
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("X");
-                        Console.ForegroundColor = ConsoleColor.White;
+                        Program.PrintColoredString("X", "darkred");
                     }
                 }
 
@@ -349,8 +365,8 @@ namespace ConsoleMinesweeper
                 }
             }
 
-            //Set console text color back to default (Gray)
-            Console.ForegroundColor = ConsoleColor.Gray;
+            //Set console text color back to default (Black)
+            Console.ForegroundColor = ConsoleColor.Black;
         }
 
         public void GenerateMinesBoardArray(int xCoordIndex, int yCoordIndex)

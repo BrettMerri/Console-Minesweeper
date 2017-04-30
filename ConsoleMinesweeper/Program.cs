@@ -12,8 +12,8 @@ namespace ConsoleMinesweeper
         {
             //Add console title, console colors, console window size, and console window position
             Console.Title = "Console Minesweeper";
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Console.SetWindowPosition(0, 0);
 
@@ -204,9 +204,7 @@ namespace ConsoleMinesweeper
 
         public static void endGame()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("You found a mine! Game over.");
-            Console.ForegroundColor = ConsoleColor.Gray;
+            PrintColoredString("You found a mine! Game over.\n", "darkred");
         }
 
         public static bool ContinueGame()
@@ -222,6 +220,30 @@ namespace ConsoleMinesweeper
                 return false;
         }
 
+        public static void PrintColoredString(string stringValue, string color)
+        {
+            if (color == "blue")
+                Console.ForegroundColor = ConsoleColor.Blue;
+            else if (color == "green")
+                Console.ForegroundColor = ConsoleColor.Green;
+            else if (color == "darkgreen")
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            else if (color == "red")
+                Console.ForegroundColor = ConsoleColor.Red;
+            else if (color == "darkblue")
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+            else if (color == "darkred")
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            else if (color == "cyan")
+                Console.ForegroundColor = ConsoleColor.Cyan;
+            else if (color == "black")
+                Console.ForegroundColor = ConsoleColor.Black;
+            else if (color == "gray")
+                Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write(stringValue);
+
+            Console.ForegroundColor = ConsoleColor.Black;
+        }
     }
 }
 

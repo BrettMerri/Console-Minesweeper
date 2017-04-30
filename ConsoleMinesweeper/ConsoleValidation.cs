@@ -24,9 +24,7 @@ namespace ConsoleMinesweeper
                         return Input;
                 }
                 //If user input does not equal any of the options, write a list of options to choose from and have them try again.
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"Input must be either of the following: [{ListOfOptions}]. Try again: ");
-                Console.ForegroundColor = ConsoleColor.Gray;
+                Program.PrintColoredString($"Input must be either of the following: [{ListOfOptions}]. Try again: ", "darkred");
             }
         }
 
@@ -35,9 +33,7 @@ namespace ConsoleMinesweeper
             int Input;
             while (!int.TryParse(Console.ReadLine(), out Input)) //While user input is unable to be parsed into an integer, display error.
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("Invalid input. Try again: ");
-                Console.ForegroundColor = ConsoleColor.Gray;
+                Program.PrintColoredString("Invalid input. Try again: ", "darkred");
             }
             return Input;
         }
@@ -47,9 +43,7 @@ namespace ConsoleMinesweeper
             int Input = GetValidInteger(); //Gets a valid integer from user input
             while (Input < Min || Input > Max) //While input is less than the min or greater than the max, display an error.
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"Input not between {Min} and {Max}. Try again: ");
-                Console.ForegroundColor = ConsoleColor.Gray;
+                Program.PrintColoredString($"Input not between {Min} and {Max}. Try again: ", "darkred");
                 Input = GetValidInteger(); //Get another valid integer from the user if input is not in range.
             }
             return Input;
