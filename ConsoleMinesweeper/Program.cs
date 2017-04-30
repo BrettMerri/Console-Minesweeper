@@ -12,7 +12,7 @@ namespace ConsoleMinesweeper
         {
             //Add console title, console colors, console window size, and console window position
             Console.Title = "Console Minesweeper";
-            Console.BackgroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Console.SetWindowPosition(0, 0);
@@ -190,7 +190,7 @@ namespace ConsoleMinesweeper
                 if (firstRun == true)
                 {
                     //Generates the board's 2-D array, minesBoardArray, with the mines spread out randomly. True = mine. False = no mine.
-                    currentBoard.GenerateMinesBoardArray(xCoordIndex, yCoordIndex);
+                    currentBoard.GenerateMinesBoardArray();
                     currentBoard.CheckForSurroundingMines();
 
                     //Set firstRun to false afterwards so we only generate the mine locations once.
@@ -234,14 +234,17 @@ namespace ConsoleMinesweeper
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
             else if (color == "darkred")
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-            else if (color == "cyan")
-                Console.ForegroundColor = ConsoleColor.Cyan;
+            else if (color == "darkcyan")
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
             else if (color == "black")
                 Console.ForegroundColor = ConsoleColor.Black;
             else if (color == "gray")
                 Console.ForegroundColor = ConsoleColor.Gray;
+            else if (color == "darkgray")
+                Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write(stringValue);
 
+            //After writing the colored string, change color back to black.
             Console.ForegroundColor = ConsoleColor.Black;
         }
     }

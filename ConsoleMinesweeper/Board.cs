@@ -107,7 +107,7 @@ namespace ConsoleMinesweeper
             //If we can check above
             if (checkAbove == true)
             {
-                //Returns 
+                //Reveal cell above
                 if (revealedAroundZeroArray[xIndex, yIndex - 1])
                     return true;
 
@@ -335,11 +335,11 @@ namespace ConsoleMinesweeper
                             else if (surroundingMinesArrayValue == 5)
                                 color = "darkred";
                             else if (surroundingMinesArrayValue == 6)
-                                color = "cyan";
+                                color = "darkcyan";
                             else if (surroundingMinesArrayValue == 7)
                                 color = "black";
                             else
-                                color = "gray";
+                                color = "darkgray";
 
                             Program.PrintColoredString(surroundingMinesArrayValue.ToString(), color);
                         }
@@ -369,7 +369,7 @@ namespace ConsoleMinesweeper
             Console.ForegroundColor = ConsoleColor.Black;
         }
 
-        public void GenerateMinesBoardArray(int xCoordIndex, int yCoordIndex)
+        public void GenerateMinesBoardArray()
         {
             //Creates new random object
             Random r = new Random();
@@ -377,6 +377,8 @@ namespace ConsoleMinesweeper
             int randomHorizontalIndex;
             int randomVerticalIndex;
             bool randomIndexValue;
+
+            bool[,] doNotMakeMinesArea = generateDoNotMakeMinesArea(chosenXIndex, chosenYIndex);
 
             //For each mine in the board
             for (int i = 0; i < mines; i++)
@@ -390,11 +392,13 @@ namespace ConsoleMinesweeper
                 //Finds the value of the a random cell selected by the randomHorizontalIndex and the randomVerticalIndex
                 randomIndexValue = hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex];
 
+                CheckBothBoundaries(randomHorizontalIndex, randomVerticalIndex);
+
                 //Selects a random index horizontally and vertically.
                 //If the selected value is true (mine), decrement i so that the for loop loops an extra time.
                 //If the random coordinants = the first selected coordinants, decrement i so that the for loops loops an extra time.
                 if (randomIndexValue == true ||
-                   (randomHorizontalIndex == xCoordIndex && randomVerticalIndex == yCoordIndex))
+                   doNotMakeMinesArea[randomHorizontalIndex, randomVerticalIndex])
                     i--;
                 else
                 {
@@ -402,6 +406,73 @@ namespace ConsoleMinesweeper
                     hasMineBoardArray[randomHorizontalIndex, randomVerticalIndex] = true;
                 }
             }
+        }
+
+        public bool[,] generateDoNotMakeMinesArea(int xIndex, int yIndex)
+        {
+            bool[,] doNotMakeMinesArea = new bool[horizontal, vertical];
+
+            doNotMakeMinesArea[xIndex, yIndex] = true;
+
+            CheckBothBoundaries(xIndex, yIndex);
+
+            //If we can check above
+            if (checkAbove == true)
+            {
+                //set cell above to true
+                doNotMakeMinesArea[xIndex, yIndex - 1] = true;
+
+                //If we can check above and left
+                if (checkLeft == true)
+                {
+                    //Set cell up-left to true
+                    doNotMakeMinesArea[xIndex - 1, yIndex - 1] = true;
+                }
+            }
+
+            //If we can check left
+            if (checkLeft == true)
+            {
+                //Set cell left to true
+                doNotMakeMinesArea[xIndex - 1, yIndex] = true;
+
+                //If we can check left and below
+                if (checkBelow == true)
+                {
+                    //Set cell down-left to true 
+                    doNotMakeMinesArea[xIndex - 1, yIndex + 1] = true;
+                }
+            }
+
+            //If we can check below
+            if (checkBelow == true)
+            {
+                //Set cell below to true
+                doNotMakeMinesArea[xIndex, yIndex + 1] = true;
+
+                //If we can check below and right
+                if (checkRight == true)
+                {
+                    //Set cell down-right to true
+                    doNotMakeMinesArea[xIndex + 1, yIndex + 1] = true;
+                }
+
+            }
+
+            //If we can check right
+            if (checkRight == true)
+            {
+                //Set cell right to tryue
+                doNotMakeMinesArea[xIndex + 1, yIndex] = true;
+
+                //If we can check right and above
+                if (checkAbove == true)
+                {
+                    //Set cell up-right to true
+                    doNotMakeMinesArea[xIndex + 1, yIndex - 1] = true;
+                }
+            }
+            return doNotMakeMinesArea;
         }
 
         public void CheckXBoundaries(int xIndex)
