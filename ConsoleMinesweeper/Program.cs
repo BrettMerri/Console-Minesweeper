@@ -193,10 +193,12 @@ namespace ConsoleMinesweeper
                     currentBoard.GenerateMinesBoardArray(xCoordIndex, yCoordIndex);
                     currentBoard.CheckForSurroundingMines();
 
-
                     //Set firstRun to false afterwards so we only generate the mine locations once.
                     firstRun = false;
                 }
+
+                if (currentBoard.SurroundingMinesArray[xCoordIndex, yCoordIndex] == 0)
+                    currentBoard.RevealAroundAllZeros();
             }
         }
 

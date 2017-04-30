@@ -38,7 +38,6 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
-
             //Sets TwoDigitXAxis to true if Horizontal is greater than 9
             if (horizontal > 9) 
                 twoDigitXAxis = true;
@@ -69,6 +68,169 @@ namespace ConsoleMinesweeper
             //Print two new lines after the board has printed.
             Console.Write("\n\n"); 
 
+        }
+
+        public void RevealAroundAllZeros()
+        {
+            bool[,] zeroIsNeighbor = new bool[horizontal, vertical];
+            bool[,] revealedAroundZeroArray = new bool[horizontal, vertical];
+
+            //Reveals the surrounding cells from the chosen X and Y index.
+            RevealSurroundingCells(chosenXIndex, chosenYIndex);
+            revealedAroundZeroArray[chosenXIndex, chosenYIndex] = true;
+            
+            //Outer for loop: rows
+            for (int row = 0; row < vertical; row++)
+            {
+                //Inner for loop: writes columns values
+                for (int column = 0; column < horizontal; column++)
+                {
+                    if (surroundingMinesArray[column, row] == 0 &&
+                        revealedAroundZeroArray[column, row] == false)
+                    {
+                        if (IsANeighbor(column, row, revealedAroundZeroArray))
+                        {
+                            RevealSurroundingCells(column, row);
+                            revealedAroundZeroArray[column, row] = true;
+                            row = 0;
+                            column = -1;
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool IsANeighbor(int xIndex, int yIndex, bool[,] revealedAroundZeroArray)
+        {
+            CheckBothBoundaries(xIndex, yIndex);
+
+            //If we can check above
+            if (checkAbove == true)
+            {
+                //Returns 
+                if (revealedAroundZeroArray[xIndex, yIndex - 1])
+                    return true;
+
+                //If we can check above and left
+                if (checkLeft == true)
+                {
+                    //Reveal cell up-left
+                    if (revealedAroundZeroArray[xIndex - 1, yIndex - 1])
+                        return true;
+                }
+            }
+
+            //If we can check left
+            if (checkLeft == true)
+            {
+                //Reveal cell left
+                if (revealedAroundZeroArray[xIndex - 1, yIndex])
+                    return true;
+
+                //If we can check left and below
+                if (checkBelow == true)
+                {
+                    //Reveal cell down-left
+                    if (revealedAroundZeroArray[xIndex - 1, yIndex + 1])
+                        return true;
+                }
+            }
+
+            //If we can check below
+            if (checkBelow == true)
+            {
+                //Reveal cell below
+                if (revealedAroundZeroArray[xIndex, yIndex + 1])
+                    return true;
+
+                //If we can check below and right
+                if (checkRight == true)
+                {
+                    //Reveal cell down-right
+                    if (revealedAroundZeroArray[xIndex + 1, yIndex + 1])
+                        return true;
+                }
+
+            }
+
+            //If we can check right
+            if (checkRight == true)
+            {
+                //Reveal cell right
+                if (revealedAroundZeroArray[xIndex + 1, yIndex])
+                    return true;
+
+                //If we can check right and above
+                if (checkAbove == true)
+                {
+                    //Reveal cell up-right
+                    if (revealedAroundZeroArray[xIndex + 1, yIndex - 1])
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public void RevealSurroundingCells(int xIndex, int yIndex)
+        {
+            CheckBothBoundaries(xIndex, yIndex);
+            
+            //If we can check above
+            if (checkAbove == true)
+            {
+                //Reveal cell above
+                isSelectedBoardArray[xIndex, yIndex - 1] = true;
+
+                //If we can check above and left
+                if (checkLeft == true)
+                {
+                    //Reveal cell up-left
+                    isSelectedBoardArray[xIndex - 1, yIndex - 1] = true;
+                }
+            }
+
+            //If we can check left
+            if (checkLeft == true)
+            {
+                //Reveal cell left
+                isSelectedBoardArray[xIndex - 1, yIndex] = true;
+
+                //If we can check left and below
+                if (checkBelow == true)
+                {
+                    //Reveal cell down-left
+                    isSelectedBoardArray[xIndex - 1, yIndex + 1] = true;
+                }
+            }
+
+            //If we can check below
+            if (checkBelow == true)
+            {
+                //Reveal cell below
+                isSelectedBoardArray[xIndex, yIndex + 1] = true;
+
+                //If we can check below and right
+                if (checkRight == true)
+                {
+                    //Reveal cell down-right
+                    isSelectedBoardArray[xIndex + 1, yIndex + 1] = true;
+                }
+
+            }
+
+            //If we can check right
+            if (checkRight == true)
+            {
+                //Reveal cell right
+                isSelectedBoardArray[xIndex + 1, yIndex] = true;
+
+                //If we can check right and above
+                if (checkAbove == true)
+                {
+                    //Reveal cell up-right
+                    isSelectedBoardArray[xIndex + 1, yIndex - 1] = true;
+                }
+            }
         }
 
         public void WriteYAxisCoodinants(int row)
@@ -284,6 +446,7 @@ namespace ConsoleMinesweeper
             for (int row = 0; row < vertical; row++)
             {
                 //row = Y coordinate index
+                //Checks the boundries above and below
                 CheckYBoundaries(row);
 
                 //If the cell is in the last row, do not check the values below
@@ -291,78 +454,90 @@ namespace ConsoleMinesweeper
                 //Prints left to right
                 for (int column = 0; column < horizontal; column++)
                 {
-                    //column = X coordinate index
-                    CheckXBoundaries(column);
 
-                    //If we can check above
-                    if (checkAbove == true)
+                    //If this cell contains a mine
+                    if (hasMineBoardArray[column, row])
                     {
-                        //Check for mine above 
-                        if (hasMineBoardArray[column, row - 1] == true)
-                            nearbyMineCount++;
-
-                        //If we can check above and to the left
-                        if (checkLeft == true)
-                        {
-                            //Check for mine diagonal-uleft.
-                            if (hasMineBoardArray[column - 1, row - 1] == true)
-                                nearbyMineCount++;
-                        }
+                        //Set this cell's surroundingMinesArray value to -1
+                        surroundingMinesArray[column, row] = -1;
                     }
-
-                    //If we can check left
-                    if (checkLeft == true)
+                    else
                     {
-                        // Check for mine to the left
-                        if (hasMineBoardArray[column - 1, row] == true)
-                            nearbyMineCount++;
+                        //column = X coordinate index
+                        //Checks the boundaries left and right
+                        CheckXBoundaries(column);
 
-                        //If we can check left and below
-                        if (checkBelow == true)
-                        {
-                            //Check for mine diagonal-dleft.
-                            if (hasMineBoardArray[column - 1, row + 1] == true)
-                                nearbyMineCount++;
-                        }
-                    }
-
-                    //If we can check below
-                    if (checkBelow == true)
-                    {
-                        //Check for mine below
-                        if (hasMineBoardArray[column, row + 1] == true)
-                            nearbyMineCount++;
-
-                        //If we can check below and right
-                        if (checkRight == true)
-                        {
-                            // Check for mine diagonal-dright.
-                            if (hasMineBoardArray[column + 1, row + 1] == true)
-                                nearbyMineCount++;
-                        }
-
-                    }
-                    
-                    //If we can check right
-                    if (checkRight == true)
-                    {
-                        // Check for mine to the right.
-                        if (hasMineBoardArray[column + 1, row] == true)
-                            nearbyMineCount++;
-
-                        //If we can check right and above
+                        //If we can check above
                         if (checkAbove == true)
                         {
-                            // Check for mine diagonal-uright.
-                            if (hasMineBoardArray[column + 1, row - 1] == true)
+                            //Check for mine above 
+                            if (hasMineBoardArray[column, row - 1] == true)
                                 nearbyMineCount++;
-                        }
-                        
-                    }
 
-                    //Once we check all all of the areas around the cell as we can
-                    //Set the value for that index in the surroundingMinesArray to the number of mines that were found
-                    surroundingMinesArray[column, row] = nearbyMineCount;
+                            //If we can check above and to the left
+                            if (checkLeft == true)
+                            {
+                                //Check for mine diagonal-uleft.
+                                if (hasMineBoardArray[column - 1, row - 1] == true)
+                                    nearbyMineCount++;
+                            }
+                        }
+
+                        //If we can check left
+                        if (checkLeft == true)
+                        {
+                            // Check for mine to the left
+                            if (hasMineBoardArray[column - 1, row] == true)
+                                nearbyMineCount++;
+
+                            //If we can check left and below
+                            if (checkBelow == true)
+                            {
+                                //Check for mine diagonal-dleft.
+                                if (hasMineBoardArray[column - 1, row + 1] == true)
+                                    nearbyMineCount++;
+                            }
+                        }
+
+                        //If we can check below
+                        if (checkBelow == true)
+                        {
+                            //Check for mine below
+                            if (hasMineBoardArray[column, row + 1] == true)
+                                nearbyMineCount++;
+
+                            //If we can check below and right
+                            if (checkRight == true)
+                            {
+                                // Check for mine diagonal-dright.
+                                if (hasMineBoardArray[column + 1, row + 1] == true)
+                                    nearbyMineCount++;
+                            }
+
+                        }
+
+                        //If we can check right
+                        if (checkRight == true)
+                        {
+                            // Check for mine to the right.
+                            if (hasMineBoardArray[column + 1, row] == true)
+                                nearbyMineCount++;
+
+                            //If we can check right and above
+                            if (checkAbove == true)
+                            {
+                                // Check for mine diagonal-uright.
+                                if (hasMineBoardArray[column + 1, row - 1] == true)
+                                    nearbyMineCount++;
+                            }
+
+                        }
+
+                        //Once we check all all of the areas around the cell as we can
+                        //Set the value for that index in the surroundingMinesArray to the number of mines that were found
+                        surroundingMinesArray[column, row] = nearbyMineCount;
+
+                    }
 
                     //Reset the nearbyMineCount and checkLeft/checkRight values before checking the next cell in this row
                     nearbyMineCount = 0;
