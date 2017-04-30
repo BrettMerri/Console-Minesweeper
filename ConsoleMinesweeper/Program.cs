@@ -105,6 +105,8 @@ namespace ConsoleMinesweeper
             int horizontalBoardSize = currentBoard.Horizontal;
             int verticalBoardSize = currentBoard.Vertical;
 
+            string selection;
+
             //Sets the board's 2-D array, isSelectedBoardArray, to the size of the board. All values start as false.
             currentBoard.IsSelectedBoardArray = new bool[horizontalBoardSize, verticalBoardSize];
 
@@ -136,17 +138,27 @@ namespace ConsoleMinesweeper
                 Console.Write("Enter value for X coordinate: ");
 
                 xCoordIndex = ConsoleValidation.GetIntegerInRange(1, horizontalBoardSize) - 1;
+                currentBoard.ChosenXIndex = xCoordIndex;
 
                 //Prompt user for Y coordinant
                 Console.Write("Enter value for Y coordinate: ");
 
                 yCoordIndex = ConsoleValidation.GetIntegerInRange(1, verticalBoardSize) - 1;
+                currentBoard.ChosenYIndex = yCoordIndex;
 
-                //Prompt user if he wants to select the flag the coordinate
-
-                Console.WriteLine($"Would you like to [S]elect or [F]lag or [C]ancel coordinate {xCoordIndex + 1}, {yCoordIndex + 1}? (s/f/c): ");
-
-                string selection = ConsoleValidation.GetValidString(new string[] { "s", "f", "c" });
+                //If this is the first run 
+                if (firstRun)
+                {
+                    //Prompt user if he wants to Select or Cancel the coordinate
+                    Console.WriteLine($"Would you like to [S]elect or [C]ancel coordinate {xCoordIndex + 1}, {yCoordIndex + 1}? (s/c): ");
+                    selection = ConsoleValidation.GetValidString(new string[] { "s", "c" });
+                }
+                else
+                {
+                    //Prompt user if he wants to Select, Flag or Cancel the coordinate
+                    Console.WriteLine($"Would you like to [S]elect or [F]lag or [C]ancel coordinate {xCoordIndex + 1}, {yCoordIndex + 1}? (s/f/c): ");
+                    selection = ConsoleValidation.GetValidString(new string[] { "s", "f", "c" });
+                }
 
                 //If user selectes "s" for Select
                 if (selection == "s")
@@ -159,10 +171,12 @@ namespace ConsoleMinesweeper
                 //If user selected "f" for Flag
                 else if (selection == "f")
                 {
-                    //Set the selected coordinant to true
+                    //Toggle coordinant between true and false
                     //A true flaggedBoardArray value makes the cell into a flag
-                    currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
-                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+                    if (currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] == false)
+                        currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
+                    else
+                        currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = false;
                 }
 
                 //If user selected "c" for Cancel

@@ -13,8 +13,8 @@ namespace ConsoleMinesweeper
         private int vertical;
         private int mines;
 
-        private int lastChosenXIndex;
-        private int lastChosenYIndex;
+        private int chosenXIndex;
+        private int chosenYIndex;
 
         private bool twoDigitXAxis;
         private bool twoDigitYAxis;
@@ -32,6 +32,7 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
+
             //Sets TwoDigitXAxis to true if Horizontal is greater than 9
             if (horizontal > 9) 
                 twoDigitXAxis = true;
@@ -125,11 +126,6 @@ namespace ConsoleMinesweeper
                 //Checks if cell is not selected
                 if (isSelectedBoardArray[columnIndex, rowIndex] == false)
                 {
-                    //Write "#" if the cell is availble to be selected
-                    Console.Write("#");
-                }
-                else
-                {
                     //Write a green "F" if the cell is flagged
                     if (isFlaggedBoardArray[columnIndex, rowIndex] == true)
                     {
@@ -137,32 +133,38 @@ namespace ConsoleMinesweeper
                         Console.Write("F");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
-                    //If cell is not flagged
                     else
                     {
-                        //If there is no mine, write "_"
-                        if (hasMineBoardArray[columnIndex, rowIndex] == false)
+                        //Write "#" if the cell is availble to be selected
+                        Console.Write("#");
+                    }
+                }
+                else
+                {
+                    //If there is no mine, write the number of surrounding mines
+                    if (hasMineBoardArray[columnIndex, rowIndex] == false)
+                    {
+                        int surroundingMinesArrayValue = surroundingMinesArray[columnIndex, rowIndex];
+
+                        //If there are no surrounding mines
+                        if (surroundingMinesArrayValue == 0)
                         {
-                            int surroundingMinesArrayValue = surroundingMinesArray[columnIndex, rowIndex];
-
-                            if (surroundingMinesArrayValue == 0)
-                            {
-                                Console.Write(" ");
-                            }
-
-                            else
-                            {
-                                Console.Write(surroundingMinesArrayValue);
-                            }
+                            //TODO: Write new method here that sets surrounding tile's isSelectedBoardArray value to true;
+                            Console.Write(" ");
                         }
-                        //If there is a mine, write a red "X" and set mineSelected to true
+
                         else
                         {
-                            RunGame = false;
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("X");
-                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(surroundingMinesArrayValue);
                         }
+                    }
+                    //If there is a mine, write a red "X" and set mineSelected to true
+                    else
+                    {
+                        RunGame = false;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("X");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
 
@@ -492,6 +494,32 @@ namespace ConsoleMinesweeper
             set
             {
                 runGame = value;
+            }
+        }
+
+        public int ChosenXIndex
+        {
+            get
+            {
+                return chosenXIndex;
+            }
+
+            set
+            {
+                chosenXIndex = value;
+            }
+        }
+
+        public int ChosenYIndex
+        {
+            get
+            {
+                return chosenYIndex;
+            }
+
+            set
+            {
+                chosenYIndex = value;
             }
         }
         #endregion

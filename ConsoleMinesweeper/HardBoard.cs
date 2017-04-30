@@ -11,9 +11,12 @@ namespace ConsoleMinesweeper
         public HardBoard()
         {
             Title = "Hard";
+
             Horizontal = 16;
             Vertical = 30;
+
             Mines = 99;
+
             HasMineBoardArray = new bool[Horizontal, Vertical];
             SurroundingMinesArray = new int[Horizontal, Vertical];
         }
