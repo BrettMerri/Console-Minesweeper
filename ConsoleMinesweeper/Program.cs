@@ -106,6 +106,14 @@ namespace ConsoleMinesweeper
             int horizontalBoardSize = currentBoard.Horizontal;
             int verticalBoardSize = currentBoard.Vertical;
 
+            //Sets TwoDigitXAxis to true if Horizontal is greater than 9
+            if (currentBoard.Horizontal > 9)
+                currentBoard.TwoDigitXAxis = true;
+
+            //Sets TwoDigitYAxis to true if Vertical is greater than 9
+            if (currentBoard.Vertical > 9)
+                currentBoard.TwoDigitYAxis = true;
+
             string selection;
 
             //Sets the board's 2-D array, isSelectedBoardArray, to the size of the board. All values start as false.
@@ -130,7 +138,7 @@ namespace ConsoleMinesweeper
                 currentBoard.CreateBoard(); 
 
                 //If the user selected a mine, end the game
-                if (currentBoard.RunGame == false)
+                if (currentBoard.LoseGame == true)
                 {
                     endGame();
                     return;
@@ -168,6 +176,7 @@ namespace ConsoleMinesweeper
                     //Set the selected coordinant to true in IsSelectedBoardArray
                     //A true IsSelectedBoardArray value makes the cell unavailable
                     currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+
                 }
                 
                 //If user selected "f" for Flag

@@ -38,14 +38,6 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
-            //Sets TwoDigitXAxis to true if Horizontal is greater than 9
-            if (horizontal > 9) 
-                twoDigitXAxis = true;
-
-            //Sets TwoDigitYAxis to true if Vertical is greater than 9
-            if (vertical > 9) 
-                twoDigitYAxis = true;
-
             //Print new line before printing the board
             Console.WriteLine(); 
 
@@ -638,7 +630,6 @@ namespace ConsoleMinesweeper
                 checkBelow = true;
             }
         }
-
 
         #region Properties
         public int Horizontal
