@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -98,7 +99,6 @@ namespace ConsoleMinesweeper
         public static void StartGame(Board currentBoard)
         {
             //Coordinants integers
-
             int xCoordIndex;
             int yCoordIndex;
 
@@ -232,16 +232,21 @@ namespace ConsoleMinesweeper
                 }
 
                 if (currentBoard.SurroundingMinesArray[xCoordIndex, yCoordIndex] == 0)
+                {
+                    (new SoundPlayer("../../audio/Clear.wav")).Play();
                     currentBoard.RevealAroundAllZeros();
+                }
             }
         }
 
         public static void loseGame()
         {
+            (new SoundPlayer("../../audio/Lose.wav")).Play();
             PrintColoredString("You found a mine! Game over.\n", "darkred");
         }
         public static void winGame()
         {
+            (new SoundPlayer("../../audio/Win.wav")).Play();
             PrintColoredString("You win!\n", "darkgreen");
         }
 
