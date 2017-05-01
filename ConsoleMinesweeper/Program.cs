@@ -114,6 +114,8 @@ namespace ConsoleMinesweeper
             if (currentBoard.Vertical > 9)
                 currentBoard.TwoDigitYAxis = true;
 
+            currentBoard.MinesRemaining = currentBoard.Mines;
+
             string selection;
 
             //Sets the board's 2-D array, isSelectedBoardArray, to the size of the board. All values start as false.
@@ -132,7 +134,7 @@ namespace ConsoleMinesweeper
 
                 //Write header showing what game mode and how many mines
                 Console.WriteLine($"=== {currentBoard.Title} Mode  ===");
-                Console.WriteLine($"=== {currentBoard.Mines} Mines ===");
+                Console.WriteLine($"=== {currentBoard.MinesRemaining} Mines ===");
 
                 //Prints the board
                 currentBoard.CreateBoard(); 
@@ -140,7 +142,12 @@ namespace ConsoleMinesweeper
                 //If the user selected a mine, end the game
                 if (currentBoard.LoseGame == true)
                 {
-                    endGame();
+                    loseGame();
+                    return;
+                }
+                if (currentBoard.WinGame == true)
+                {
+                    winGame();
                     return;
                 }
 
@@ -173,14 +180,21 @@ namespace ConsoleMinesweeper
                 //If user selectes "s" for Select
                 if (selection == "s")
                 {
-                    //Set the selected coordinant to true in IsSelectedBoardArray
-                    //A true IsSelectedBoardArray value makes the cell unavailable
-                    currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
-
-                    //If the user selected a mine, set loseGame to true
-                    if (currentBoard.HasMineBoardArray[xCoordIndex, yCoordIndex] == true)
+                    if (currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] == false)
                     {
-                        currentBoard.LoseGame = true;
+                        //Set the selected coordinant to true in IsSelectedBoardArray
+                        //A true IsSelectedBoardArray value makes the cell unavailable
+                        currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
+
+                        //If the user selected a mine, set loseGame to true
+                        if (currentBoard.HasMineBoardArray[xCoordIndex, yCoordIndex] == true)
+                        {
+                            currentBoard.LoseGame = true;
+                        }
+                        else
+                        {
+                            currentBoard.AmountOfSelectedTiles++;
+                        }
                     }
                 }
                 
@@ -192,12 +206,12 @@ namespace ConsoleMinesweeper
                     if (currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] == false)
                     {
                         currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = true;
-                        currentBoard.Mines--;
+                        currentBoard.MinesRemaining--;
                     }
                     else
                     {
                         currentBoard.IsFlaggedBoardArray[xCoordIndex, yCoordIndex] = false;
-                        currentBoard.Mines++;
+                        currentBoard.MinesRemaining++;
                     }
                 }
 
@@ -222,9 +236,13 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public static void endGame()
+        public static void loseGame()
         {
             PrintColoredString("You found a mine! Game over.\n", "darkred");
+        }
+        public static void winGame()
+        {
+            PrintColoredString("You win!\n", "darkgreen");
         }
 
         public static bool ContinueGame()

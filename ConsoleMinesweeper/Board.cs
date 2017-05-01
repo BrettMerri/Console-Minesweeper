@@ -12,19 +12,19 @@ namespace ConsoleMinesweeper
         private int horizontal;
         private int vertical;
         private int mines;
-
+        private int minesRemaining;
         private int chosenXIndex;
         private int chosenYIndex;
+        private int amountOfSelectedTiles;
 
         private bool twoDigitXAxis;
         private bool twoDigitYAxis;
-
-        bool checkAbove = true;
-        bool checkBelow = true;
-        bool checkLeft = true;
-        bool checkRight = true;
-
+        private bool checkAbove = true;
+        private bool checkBelow = true;
+        private bool checkLeft = true;
+        private bool checkRight = true;
         private bool loseGame;
+        private bool winGame;
 
         private bool[,] hasMineBoardArray;
         private bool[,] isSelectedBoardArray;
@@ -38,6 +38,12 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
+            //If all tiles that are not mines are selected
+            if (AmountOfSelectedTiles == Horizontal * Vertical - Mines)
+            {
+                RevealAllMines();
+                winGame = true;
+            }
             //If the user selected a mine cell, change all cells with mines to "isSelected" so that they show up when the board is written to the console
             if (loseGame == true)
             {
@@ -76,6 +82,7 @@ namespace ConsoleMinesweeper
                 {
                     //Column index = column 
                     //Row index = vertical - i - 1
+                    //Row index is like this because the Y-Coordinates are actually backwards for the user
                     int columnIndex = column;
                     int rowIndex = vertical - row - 1;
 
@@ -195,13 +202,21 @@ namespace ConsoleMinesweeper
             if (checkAbove == true)
             {
                 //Reveal cell above
-                isSelectedBoardArray[xIndex, yIndex - 1] = true;
+                if (isSelectedBoardArray[xIndex, yIndex - 1] == false)
+                {
+                    amountOfSelectedTiles++;
+                    isSelectedBoardArray[xIndex, yIndex - 1] = true;
+                }
 
                 //If we can check above and left
                 if (checkLeft == true)
                 {
                     //Reveal cell up-left
-                    isSelectedBoardArray[xIndex - 1, yIndex - 1] = true;
+                    if (isSelectedBoardArray[xIndex - 1, yIndex - 1] == false)
+                    {
+                        amountOfSelectedTiles++;
+                        isSelectedBoardArray[xIndex - 1, yIndex - 1] = true;
+                    }
                 }
             }
 
@@ -209,13 +224,20 @@ namespace ConsoleMinesweeper
             if (checkLeft == true)
             {
                 //Reveal cell left
-                isSelectedBoardArray[xIndex - 1, yIndex] = true;
-
+                if (isSelectedBoardArray[xIndex - 1, yIndex] == false)
+                {
+                    amountOfSelectedTiles++;
+                    isSelectedBoardArray[xIndex - 1, yIndex] = true;
+                }
                 //If we can check left and below
                 if (checkBelow == true)
                 {
                     //Reveal cell down-left
-                    isSelectedBoardArray[xIndex - 1, yIndex + 1] = true;
+                    if (isSelectedBoardArray[xIndex - 1, yIndex + 1] == false)
+                    {
+                        amountOfSelectedTiles++;
+                        isSelectedBoardArray[xIndex - 1, yIndex + 1] = true;
+                    }
                 }
             }
 
@@ -223,13 +245,21 @@ namespace ConsoleMinesweeper
             if (checkBelow == true)
             {
                 //Reveal cell below
-                isSelectedBoardArray[xIndex, yIndex + 1] = true;
+                if (isSelectedBoardArray[xIndex, yIndex + 1] == false)
+                {
+                    amountOfSelectedTiles++;
+                    isSelectedBoardArray[xIndex, yIndex + 1] = true;
+                }
 
                 //If we can check below and right
                 if (checkRight == true)
                 {
                     //Reveal cell down-right
-                    isSelectedBoardArray[xIndex + 1, yIndex + 1] = true;
+                    if (isSelectedBoardArray[xIndex + 1, yIndex + 1] == false)
+                    {
+                        amountOfSelectedTiles++;
+                        isSelectedBoardArray[xIndex + 1, yIndex + 1] = true;
+                    }
                 }
 
             }
@@ -238,13 +268,21 @@ namespace ConsoleMinesweeper
             if (checkRight == true)
             {
                 //Reveal cell right
-                isSelectedBoardArray[xIndex + 1, yIndex] = true;
+                if (isSelectedBoardArray[xIndex + 1, yIndex] == false)
+                {
+                    amountOfSelectedTiles++;
+                    isSelectedBoardArray[xIndex + 1, yIndex] = true;
+                }
 
                 //If we can check right and above
                 if (checkAbove == true)
                 {
                     //Reveal cell up-right
-                    isSelectedBoardArray[xIndex + 1, yIndex - 1] = true;
+                    if (isSelectedBoardArray[xIndex + 1, yIndex - 1] == false)
+                    {
+                        amountOfSelectedTiles++;
+                        isSelectedBoardArray[xIndex + 1, yIndex - 1] = true;
+                    }
                 }
             }
         }
@@ -304,6 +342,7 @@ namespace ConsoleMinesweeper
             {
                 //Column index = column 
                 //Row index = vertical - i - 1
+                //Row index is like this because the Y-Coordinates are actually backwards for the user
                 int columnIndex = column;
                 int rowIndex = vertical - row - 1;
 
@@ -874,6 +913,45 @@ namespace ConsoleMinesweeper
             set
             {
                 checkRight = value;
+            }
+        }
+
+        public int MinesRemaining
+        {
+            get
+            {
+                return minesRemaining;
+            }
+
+            set
+            {
+                minesRemaining = value;
+            }
+        }
+
+        public int AmountOfSelectedTiles
+        {
+            get
+            {
+                return amountOfSelectedTiles;
+            }
+
+            set
+            {
+                amountOfSelectedTiles = value;
+            }
+        }
+
+        public bool WinGame
+        {
+            get
+            {
+                return winGame;
+            }
+
+            set
+            {
+                winGame = value;
             }
         }
         #endregion
