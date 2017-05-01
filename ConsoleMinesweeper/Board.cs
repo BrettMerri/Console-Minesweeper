@@ -38,8 +38,26 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
-            //Print new line before printing the board
-            Console.WriteLine(); 
+            //If the user selected a mine cell
+            if (loseGame == true)
+            {
+                for (int row = 0; row < vertical; row++)
+                {
+                    for (int column = 0; column < horizontal; column++)
+                    {
+                        //Column index = column 
+                        //Row index = vertical - i - 1
+                        int columnIndex = column;
+                        int rowIndex = vertical - row - 1;
+
+                        if (hasMineBoardArray[columnIndex, rowIndex] == true)
+                            isSelectedBoardArray[columnIndex, rowIndex] = true;
+                    }
+                }
+            }
+
+                //Print new line before printing the board
+                Console.WriteLine();
 
             //Outer for loop: rows
             for (int row = 0; row < vertical; row++)
@@ -336,10 +354,9 @@ namespace ConsoleMinesweeper
                             Program.PrintColoredString(surroundingMinesArrayValue.ToString(), color);
                         }
                     }
-                    //If there is a mine, write a red "X" and set mineSelected to true
+                    //If there is a mine, write a red "X"
                     else
                     {
-                        loseGame = true;
                         Program.PrintColoredString("X", "darkred");
                     }
                 }

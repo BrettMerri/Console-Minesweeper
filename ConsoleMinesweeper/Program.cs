@@ -177,6 +177,11 @@ namespace ConsoleMinesweeper
                     //A true IsSelectedBoardArray value makes the cell unavailable
                     currentBoard.IsSelectedBoardArray[xCoordIndex, yCoordIndex] = true;
 
+                    //If the user selected a mine, set loseGame to true
+                    if (currentBoard.HasMineBoardArray[xCoordIndex, yCoordIndex] == true)
+                    {
+                        currentBoard.LoseGame = true;
+                    }
                 }
                 
                 //If user selected "f" for Flag
