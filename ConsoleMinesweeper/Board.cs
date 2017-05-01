@@ -8,6 +8,7 @@ namespace ConsoleMinesweeper
 {
     class Board
     {
+        #region fields
         private string title;
         private int horizontal;
         private int vertical;
@@ -30,12 +31,17 @@ namespace ConsoleMinesweeper
         private bool[,] isSelectedBoardArray;
         private bool[,] isFlaggedBoardArray;
         private int[,] surroundingMinesArray;
+        #endregion 
 
+        #region constructor
         public Board()
         {
             //All board variables will come from EasyBoard.cs, MediumBoard.cs, HardBoard.cs, or CustomerBoard.cs
         }
 
+        #endregion
+
+        #region methods
         public void CreateBoard()
         {
             //If all tiles that are not mines are selected
@@ -691,6 +697,8 @@ namespace ConsoleMinesweeper
                 checkBelow = true;
             }
         }
+
+        #endregion 
 
         #region Properties
         public int Horizontal
