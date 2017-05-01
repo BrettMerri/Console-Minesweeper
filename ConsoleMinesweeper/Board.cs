@@ -38,26 +38,14 @@ namespace ConsoleMinesweeper
 
         public void CreateBoard()
         {
-            //If the user selected a mine cell
+            //If the user selected a mine cell, change all cells with mines to "isSelected" so that they show up when the board is written to the console
             if (loseGame == true)
             {
-                for (int row = 0; row < vertical; row++)
-                {
-                    for (int column = 0; column < horizontal; column++)
-                    {
-                        //Column index = column 
-                        //Row index = vertical - i - 1
-                        int columnIndex = column;
-                        int rowIndex = vertical - row - 1;
-
-                        if (hasMineBoardArray[columnIndex, rowIndex] == true)
-                            isSelectedBoardArray[columnIndex, rowIndex] = true;
-                    }
-                }
+                RevealAllMines();
             }
 
-                //Print new line before printing the board
-                Console.WriteLine();
+            //Print new line before printing the board
+            Console.WriteLine();
 
             //Outer for loop: rows
             for (int row = 0; row < vertical; row++)
@@ -78,6 +66,23 @@ namespace ConsoleMinesweeper
             //Print two new lines after the board has printed.
             Console.Write("\n\n"); 
 
+        }
+
+        public void RevealAllMines()
+        {
+            for (int row = 0; row < vertical; row++)
+            {
+                for (int column = 0; column < horizontal; column++)
+                {
+                    //Column index = column 
+                    //Row index = vertical - i - 1
+                    int columnIndex = column;
+                    int rowIndex = vertical - row - 1;
+
+                    if (hasMineBoardArray[columnIndex, rowIndex] == true)
+                        isSelectedBoardArray[columnIndex, rowIndex] = true;
+                }
+            }
         }
 
         public void RevealAroundAllZeros()
