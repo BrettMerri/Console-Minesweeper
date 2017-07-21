@@ -15,10 +15,12 @@ namespace ConsoleMinesweeper
             Horizontal = 9;
             Vertical = 9;
 
-            Mines = 10;
+            TwoDigitYAxis = false;
+            TwoDigitXAxis = false;
 
-            HasMineBoardArray = new bool[Horizontal, Vertical];
-            SurroundingMinesArray = new int[Horizontal, Vertical];
+            TotalMines = 10;
+
+            CreateEmptyCellArray();
         }
     }
 }
