@@ -3,66 +3,68 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace ConsoleMinesweeper
 {
     class ConsoleValidation
     {
 
-        public static string GetValidString(string[] Options)
+        public static string GetValidString(string[] options)
         {
-            string Input;
-            string ListOfOptions = string.Join(", ", Options); //Creates a string of all elements in the Options array seperated by a comma.
+            string input;
+            string listOfOptions = string.Join(", ", options); //Creates a string of all elements in the Options array seperated by a comma.
 
             while (true)
             {
-                Input = Console.ReadLine().ToLower(); //Gets a lowercase input from user.
+                input = Console.ReadLine().Trim().ToLower(); //Gets a lowercase input from user.
 
-                foreach (string item in Options) //Checks if user input equals any string in the Options array.
+                foreach (string item in options) //Checks if user input equals any string in the Options array.
                 {
-                    if (Input == item) //If user input equals an option, return the input.
-                        return Input;
+                    if (input == item) //If user input equals an option, return the input.
+                        return input;
                 }
                 //If user input does not equal any of the options, write a list of options to choose from and have them try again.
-                Program.PrintColoredString($"Input must be either of the following: [{ListOfOptions}]. Try again: ", ConsoleColor.DarkRed);
+                Program.PrintColoredString($"Input must be either of the following: [{listOfOptions}]. Try again: ", ConsoleColor.DarkRed);
             }
         }
 
         public static int GetValidInteger()
         {
-            int Input;
-            while (!int.TryParse(Console.ReadLine(), out Input)) //While user input is unable to be parsed into an integer, display error.
+            int input;
+            while (!int.TryParse(Console.ReadLine(), out input)) //While user input is unable to be parsed into an integer, display error.
             {
                 Program.PrintColoredString("Invalid input. Try again: ", ConsoleColor.DarkRed);
             }
-            return Input;
+            return input;
         }
 
-        public static int GetIntegerInRange(int Min, int Max)
+        public static int GetIntegerInRange(int min, int max)
         {
-            int Input = GetValidInteger(); //Gets a valid integer from user input
-            while (Input < Min || Input > Max) //While input is less than the min or greater than the max, display an error.
+            int input = GetValidInteger(); //Gets a valid integer from user input
+            while (input < min || input > max) //While input is less than the min or greater than the max, display an error.
             {
-                Program.PrintColoredString($"Input not between {Min} and {Max}. Try again: ", ConsoleColor.DarkRed);
-                Input = GetValidInteger(); //Get another valid integer from the user if input is not in range.
+                Program.PrintColoredString($"Input not between {min} and {max}. Try again: ", ConsoleColor.DarkRed);
+                input = GetValidInteger(); //Get another valid integer from the user if input is not in range.
             }
-            return Input;
+            return input;
         }
 
-        public static int[] GetValidCoordinates(int horizontal, int vertical)
+        public static InputCoordinates GetValidCoordinates(int horizontal, int vertical)
         {
             while (true)
             {
-                string input = Console.ReadLine();
+                string input = Console.ReadLine().Trim().ToLower();
                 string[] values;
 
-                if (input.Count(c => c == '/') != 1)
+                //Regex validates input is a number between 0 - 30, slash, number between 0 - 30, space, s or f character
+                if (!Regex.IsMatch(input, @"([0-9]|[1-2][0-9]|30)\/([0-9]|[1-2][0-9]|30)\s[sf]"))
                 {
                     Program.PrintColoredString("Invalid input. Try again: ", ConsoleColor.DarkRed);
                     continue;
                 }
 
-                values = input.Split('/');
+                values = input.Split(new char[] { '/', ' ' });
 
                 if (!int.TryParse(values[0], out int x))
                 {
@@ -88,7 +90,13 @@ namespace ConsoleMinesweeper
                     continue;
                 }
 
-                return new int[] { x, y };
+                if (!Enum.TryParse(values[2].ToUpper(), out SelectOrFlag option))
+                {
+                    Program.PrintColoredString($"Action is not S or F. Try again: ", ConsoleColor.DarkRed);
+                    continue;
+                }
+
+                return new InputCoordinates(x, y, option);
             }
         }
 

@@ -98,22 +98,34 @@ namespace ConsoleMinesweeper
 
         public static void PlayGame(Board currentBoard)
         {
-            Console.Clear(); 
+            bool runGame = true;
+            bool firstRun = true;
 
-            Console.WriteLine($"{currentBoard.Title} Mode - {currentBoard.TotalMines}");
+            while (runGame)
+            {
+                Console.Clear();
 
-            currentBoard.WriteBoard();
+                Console.WriteLine($"{currentBoard.Title} Mode - {currentBoard.TotalMines} mines");
 
-            Console.WriteLine("Select a coordinate by typing x/y: ");
-            int[] coordinates = ConsoleValidation.GetValidCoordinates(currentBoard.Horizontal, currentBoard.Vertical);
+                currentBoard.WriteBoard();
 
-            //Convert typed coordinates to coordinate indexes for the array of the cells
-            int xCoord = coordinates[0] - 1;
-            int yCoord = currentBoard.Vertical - coordinates[1];
+                Console.WriteLine("\nTo play you must type a coordinate followed by S or F to select or flag.");
+                Console.WriteLine("For example: '4/5 S' to select 4/5 or '2/1 F' to flag 2/1.\n");
+                InputCoordinates coordinates = ConsoleValidation.GetValidCoordinates(currentBoard.Horizontal, currentBoard.Vertical);
 
-            Console.WriteLine($"{xCoord}/{yCoord}");
+                //Convert typed coordinates to coordinate indexes for the array of the cells
+                int xCoord = coordinates.X - 1;
+                int yCoord = currentBoard.Vertical - coordinates.Y;
 
-            currentBoard.GenerateMines(yCoord, xCoord);
+                Console.WriteLine($"{xCoord}/{yCoord}");
+
+                if (firstRun)
+                {
+                    currentBoard.GenerateMines(yCoord, xCoord);
+                    firstRun = false;
+                }
+                    
+            }
         }
 
         public static bool ContinueGame()

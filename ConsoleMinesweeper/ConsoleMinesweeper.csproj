@@ -49,6 +49,7 @@
     <Compile Include="CustomBoard.cs" />
     <Compile Include="EasyBoard.cs" />
     <Compile Include="HardBoard.cs" />
+    <Compile Include="InputCoordinates.cs" />
     <Compile Include="MediumBoard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

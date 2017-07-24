@@ -26,27 +26,36 @@ namespace ConsoleMinesweeper
         {
             CellArray = new Cell[Vertical, Horizontal];
 
-            int maxVertical = CellArray.GetLength(0) - 1;
-            int maxHorizontal = CellArray.GetLength(1) - 1;
-
-            for (int y = 0; y < CellArray.GetLength(0); y++)
+            for (int y = 0; y < Vertical; y++)
             {
-                for (int x = 0; x < CellArray.GetLength(1); x++)
+                for (int x = 0; x < Horizontal; x++)
                 {
-                    CellArray[y, x] = new Cell(y, x, maxVertical, maxHorizontal);
+                    CellArray[y, x] = new Cell();
                 }
             }
         }
 
         public void WriteBoard()
         {
-            for (int y = 0; y < CellArray.GetLength(0); y++)
+            for (int y = 0; y < Vertical; y++)
             {
                 WriteYCoordinate(y);
-                for (int x = 0; x < CellArray.GetLength(1); x++)
+                for (int x = 0; x < Horizontal; x++)
                 {
-                    Console.Write("X ");
-                    if (TwoDigitXAxis) //If TwoDigitXAxis add extra space to allow room for x coodinates
+                    Cell cell = CellArray[y, x];
+
+                    if (cell.IsFlagged)
+                        Console.Write("F");
+                    else if (!cell.IsSelected)
+                        Console.Write("#");
+                    else if (cell.IsMine)
+                        Console.Write("X");
+                    else
+                        Console.Write(cell.SurroundingMinesValue);
+
+                    if (TwoDigitXAxis) //If TwoDigitXAxis is true add extra space to allow room for x coodinates
+                        Console.Write("  ");
+                    else
                         Console.Write(" ");
                 }
                 Console.WriteLine();
@@ -83,50 +92,54 @@ namespace ConsoleMinesweeper
         public void GenerateMines(int y, int x)
         {
             CellArray[y, x].IsSelected = true;
-            int mineCount = 0;
 
-            Random yRnd = new Random();
-            Random xRnd = new Random();
+            BlacklistSurroundingCells(y, x);
 
-            int yRndValue = yRnd.Next(Vertical);
-            int xRndValue = xRnd.Next(Horizontal);
+            Random rnd = new Random();
 
-            if (CellArray[y, x].CheckAbove &&
-                !CellArray[y - 1, x].IsMineBlacklisted)
+            for (int i = 0; i < TotalMines; i++)
             {
+                int yRndValue = rnd.Next(Vertical);
+                int xRndValue = rnd.Next(Horizontal);
 
+                if (!CellArray[yRndValue, xRndValue].IsMineBlacklisted &&
+                    !CellArray[yRndValue, xRndValue].IsMine &&
+                    !CellArray[yRndValue, xRndValue].IsSelected)
+                {
+                    CellArray[yRndValue, xRndValue].IsMine = true;
+                }
+                else
+                {
+                    i--;
+                }
             }
-            
-            
+
         }
 
-        private void BlacklistSurroundingCells(int y, int x)
+        private void BlacklistSurroundingCells(int yInput, int xInput)
         {
-            if (CellArray[y, x].CheckAbove)
+            for (int y = yInput - 1; y <= yInput + 1; y++)
             {
-                CellArray[y - 1, x].IsMineBlacklisted = true;
+                if (y >= 0 && y < Vertical)
+                {
+                    for (int x = xInput - 1; x <= xInput + 1; x++)
+                    {
+                        if (x >= 0 && x < Horizontal)
+                        {
+                            CellArray[y, x].IsMineBlacklisted = true;
+                        }
+                    }
+                }
             }
-            if (CellArray[y, x].CheckBelow)
-            {
-                CellArray[y + 1, x].IsMineBlacklisted = true;
-            }
-            if (CellArray[y, x].CheckLeft)
-            {
-                CellArray[y, x - 1].IsMineBlacklisted = true;
-            }
-            if (CellArray[y, x].CheckRight)
-            {
-                CellArray[y, x + 1].IsMineBlacklisted = true;
-            }
-
         }
 
-        public string Title { get; set; }
-        public int Horizontal { get; set; }
-        public int Vertical { get; set; }
-        public int TotalMines { get; set; }
-        public Cell[,] CellArray { get; set; }
-        protected bool TwoDigitYAxis { get; set; }
-        protected bool TwoDigitXAxis { get; set; }
+        public Cell[,] CellArray { get => cellArray; set => cellArray = value; }
+        public string Title { get => title; set => title = value; }
+        public int Horizontal { get => horizontal; set => horizontal = value; }
+        public int Vertical { get => vertical; set => vertical = value; }
+        public int TotalMines { get => totalMines; set => totalMines = value; }
+        protected bool TwoDigitYAxis { get => twoDigitYAxis; set => twoDigitYAxis = value; }
+        protected bool TwoDigitXAxis { get => twoDigitXAxis; set => twoDigitXAxis = value; }
+
     }
 }
