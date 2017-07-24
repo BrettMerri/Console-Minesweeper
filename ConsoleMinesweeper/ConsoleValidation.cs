@@ -50,7 +50,7 @@ namespace ConsoleMinesweeper
             return input;
         }
 
-        public static InputCoordinates GetValidCoordinates(int horizontal, int vertical)
+        public static InputCoordinates GetValidCoordinates(int vertical, int horizontal)
         {
             while (true)
             {
@@ -96,7 +96,7 @@ namespace ConsoleMinesweeper
                     continue;
                 }
 
-                return new InputCoordinates(x, y, option);
+                return new InputCoordinates(y, x, option);
             }
         }
 

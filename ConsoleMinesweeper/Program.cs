@@ -99,7 +99,7 @@ namespace ConsoleMinesweeper
         public static void PlayGame(Board currentBoard)
         {
             bool runGame = true;
-            bool firstRun = true;
+            bool firstSelection = true;
 
             while (runGame)
             {
@@ -111,20 +111,25 @@ namespace ConsoleMinesweeper
 
                 Console.WriteLine("\nTo play you must type a coordinate followed by S or F to select or flag.");
                 Console.WriteLine("For example: '4/5 S' to select 4/5 or '2/1 F' to flag 2/1.\n");
-                InputCoordinates coordinates = ConsoleValidation.GetValidCoordinates(currentBoard.Horizontal, currentBoard.Vertical);
+                InputCoordinates coordinates = ConsoleValidation.GetValidCoordinates(currentBoard.Vertical, currentBoard.Horizontal);
 
                 //Convert typed coordinates to coordinate indexes for the array of the cells
-                int xCoord = coordinates.X - 1;
                 int yCoord = currentBoard.Vertical - coordinates.Y;
+                int xCoord = coordinates.X - 1;
 
-                Console.WriteLine($"{xCoord}/{yCoord}");
-
-                if (firstRun)
+                if (firstSelection && coordinates.Option == SelectOrFlag.S)
                 {
-                    currentBoard.GenerateMines(yCoord, xCoord);
-                    firstRun = false;
+                    currentBoard.FirstSelection(yCoord, xCoord);
+                    firstSelection = false;
                 }
-                    
+                else if (coordinates.Option == SelectOrFlag.S)
+                {
+                    currentBoard.SelectCell(yCoord, xCoord);
+                }
+                else if (coordinates.Option == SelectOrFlag.F)
+                {
+                    currentBoard.FlagCell(yCoord, xCoord);
+                }
             }
         }
 
