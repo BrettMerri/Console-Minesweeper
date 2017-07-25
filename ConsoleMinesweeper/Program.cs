@@ -48,51 +48,46 @@ namespace ConsoleMinesweeper
             Console.Write("\nPlease enter a number (1-4): ");
             int menuOptionInput = ConsoleValidation.GetIntegerInRange(1, 4);
 
-            //Easy mode
-            if (menuOptionInput == 1)
+            switch (menuOptionInput)
             {
-                //Start game with the easy board
-                Board easyBoard = new EasyBoard();
-                return easyBoard;
-            }
+                //Easy mode
+                case 1: 
+                    //Start game with the easy board
+                    Board easyBoard = new EasyBoard();
+                    return easyBoard;
 
-            //Medium mode
-            else if (menuOptionInput == 2)
-            {
-                //Start game with the medium board
-                Board mediumBoard = new MediumBoard();
-                return mediumBoard;
-            }
+                //Medium mode
+                case 2:
+                    //Start game with the medium board
+                    Board mediumBoard = new MediumBoard();
+                    return mediumBoard;
 
-            //Hard mode
-            else if (menuOptionInput == 3)
-            {
-                //Start game with the hard board
-                Board hardBoard = new HardBoard();
-                return hardBoard;
-            }
+                //Hard mode
+                case 3:
+                    //Start game with the hard board
+                    Board hardBoard = new HardBoard();
+                    return hardBoard;
 
-            //Custom mode
-            else //if (menuOptionInput == 4)
-            {
-                //Prompts user for the horizontal size
-                Console.Write("Horizontal size (5-30): ");
-                int customHorizontalInput = ConsoleValidation.GetIntegerInRange(5, 30);
+                //Custom mode
+                default:
+                    //Prompts user for the horizontal size
+                    Console.Write("Horizontal size (5-30): ");
+                    int customHorizontalInput = ConsoleValidation.GetIntegerInRange(5, 30);
 
-                //Prompts user for the vertical size
-                Console.Write("Vertical size (5-30): ");
-                int customVerticalInput = ConsoleValidation.GetIntegerInRange(5, 30);
+                    //Prompts user for the vertical size
+                    Console.Write("Vertical size (5-30): ");
+                    int customVerticalInput = ConsoleValidation.GetIntegerInRange(5, 30);
 
-                int customBoardArea = customHorizontalInput * customVerticalInput;
+                    int customBoardArea = customHorizontalInput * customVerticalInput;
 
-                //Prompts user for the amount of mines (max mines = customBoardArea - 9)
-                //customBoardArea - 9 is so we can ensure that the user's first click is a 0.
-                Console.Write($"Amount of mines (1-{customBoardArea - 9}): ");
-                int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea - 9);
+                    //Prompts user for the amount of mines (max mines = customBoardArea - 9)
+                    //customBoardArea - 9 is so we can ensure that the user's first click is a 0.
+                    Console.Write($"Amount of mines (1-{customBoardArea - 9}): ");
+                    int customMinesInput = ConsoleValidation.GetIntegerInRange(1, customBoardArea - 9);
 
-                //Start game with the custom board
-                Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
-                return customBoard;
+                    //Start game with the custom board
+                    Board customBoard = new CustomBoard(customHorizontalInput, customVerticalInput, customMinesInput);
+                    return customBoard;
             }
         }
 
@@ -150,7 +145,7 @@ namespace ConsoleMinesweeper
                 Console.Clear();
                 return true;
             }
-            else //If inpus is n, return false
+            else //If input is n, return false
                 return false;
         }
 
