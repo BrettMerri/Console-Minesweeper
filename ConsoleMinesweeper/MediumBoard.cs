@@ -8,7 +8,7 @@ namespace ConsoleMinesweeper
 {
     class MediumBoard : Board
     {
-        public MediumBoard()
+        public MediumBoard() : base()
         {
             Title = "Medium";
 

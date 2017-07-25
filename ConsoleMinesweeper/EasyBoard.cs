@@ -8,7 +8,7 @@ namespace ConsoleMinesweeper
 {
     class EasyBoard : Board
     {
-        public EasyBoard()
+        public EasyBoard() : base()
         {
             Title = "Easy";
 

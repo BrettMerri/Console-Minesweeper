@@ -16,14 +16,16 @@ namespace ConsoleMinesweeper
         private int totalMines;
         private bool twoDigitYAxis;
         private bool twoDigitXAxis;
+        private GameState state;
 
         public Board()
         {
-
+            State = GameState.BlankGameBoard;
         }
 
         public void WriteBoard()
         {
+            int selectableCells = Horizontal * Vertical;
             //Goes through y values top to bottom
             for (int y = 0; y < Vertical; y++)
             {
@@ -35,13 +37,23 @@ namespace ConsoleMinesweeper
                     Cell cell = CellArray[y, x];
 
                     if (cell.IsFlagged)
+                    {
                         Program.PrintColoredString("F", ConsoleColor.Green);
+                    }
                     else if (!cell.IsSelected)
+                    {
                         Program.PrintColoredString("#", ConsoleColor.DarkGray);
+                    }
                     else if (cell.IsMine)
+                    {
                         Program.PrintColoredString("X", ConsoleColor.Red);
+                        State = GameState.MineSelected;
+                    }
                     else
+                    {
                         WriteColoredSurroundingMinesValue(cell.SurroundingMinesValue);
+                        selectableCells--;
+                    }
 
                     if (TwoDigitXAxis) //If TwoDigitXAxis is true add extra space to allow room for x coodinates
                         Console.Write("  ");
@@ -51,13 +63,26 @@ namespace ConsoleMinesweeper
                 Console.WriteLine();
             }
             WriteXCoordinates();
+
+            //Checks if the game has been won
+            if (selectableCells == TotalMines && State != GameState.MineSelected)
+            {
+                State = GameState.GameWon;
+            }
         }
 
         public void SelectCell(int y, int x)
         {
-            if (!CellArray[y, x].IsSelected)
+            if (!CellArray[y, x].IsSelected &&
+                !CellArray[y, x].IsFlagged)
             {
                 CellArray[y, x].IsSelected = true;
+
+                if (State == GameState.BlankGameBoard)
+                {
+                    GenerateMines(y, x);
+                    State = GameState.GameInProgress;
+                }
 
                 if (CellArray[y, x].SurroundingMinesValue == 0)
                 {
@@ -75,13 +100,6 @@ namespace ConsoleMinesweeper
                 else
                     CellArray[y, x].IsFlagged = false;
             }
-        }
-
-        public void FirstSelection(int y, int x)
-        {
-            CellArray[y, x].IsSelected = true;
-            GenerateMines(y, x);
-            RevealAroundConnectingZeros(y, x);
         }
 
         private void RevealAroundConnectingZeros(int yInput, int xInput)
@@ -290,6 +308,14 @@ namespace ConsoleMinesweeper
             }
         }
 
+        public enum GameState
+        {
+            BlankGameBoard,
+            GameInProgress,
+            MineSelected,
+            GameWon
+        }
+
         public Cell[,] CellArray { get => cellArray; set => cellArray = value; }
         public string Title { get => title; set => title = value; }
         public int Horizontal { get => horizontal; set => horizontal = value; }
@@ -297,6 +323,6 @@ namespace ConsoleMinesweeper
         public int TotalMines { get => totalMines; set => totalMines = value; }
         protected bool TwoDigitYAxis { get => twoDigitYAxis; set => twoDigitYAxis = value; }
         protected bool TwoDigitXAxis { get => twoDigitXAxis; set => twoDigitXAxis = value; }
-
+        public GameState State { get => state; set => state = value; }
     }
 }

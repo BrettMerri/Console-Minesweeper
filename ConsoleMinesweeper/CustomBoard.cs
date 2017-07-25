@@ -8,7 +8,7 @@ namespace ConsoleMinesweeper
 {
     class CustomBoard : Board
     {
-        public CustomBoard(int horizontal, int verical, int mines)
+        public CustomBoard(int horizontal, int verical, int mines) : base()
         {
             Title = "Custom";
 

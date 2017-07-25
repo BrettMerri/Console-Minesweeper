@@ -8,7 +8,7 @@ namespace ConsoleMinesweeper
 {
     class HardBoard : Board
     {
-        public HardBoard()
+        public HardBoard() : base()
         {
             Title = "Hard";
 
