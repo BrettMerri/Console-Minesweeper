@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Media;
 using System.Collections.Generic;
 using System.Linq;
-using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -110,11 +110,13 @@ namespace ConsoleMinesweeper
 
                 if (currentBoard.State == Board.GameState.MineSelected)
                 {
+                    (new SoundPlayer("../../audio/Lose.wav")).Play();
                     Console.WriteLine("You hit a mine! Game over.");
                     return;
                 }
                 else if (currentBoard.State == Board.GameState.GameWon)
                 {
+                    (new SoundPlayer("../../audio/Win.wav")).Play();
                     Console.WriteLine("You win!");
                     return;
                 }
@@ -129,6 +131,7 @@ namespace ConsoleMinesweeper
 
                 if (coordinates.Option == SelectOrFlag.S)
                 {
+                    (new SoundPlayer("../../audio/Clear.wav")).Play();
                     currentBoard.SelectCell(yCoord, xCoord);
                 }
                 else if (coordinates.Option == SelectOrFlag.F)
